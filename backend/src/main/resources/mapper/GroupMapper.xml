@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meeting.mapper.GroupMapper">
+
+    <resultMap id="MeetingGroupResultMap" type="com.meeting.entity.MeetingGroup">
+        <id column="id" property="id"/>
+        <result column="group_name" property="groupName"/>
+        <result column="group_code" property="groupCode"/>
+        <result column="avatar" property="avatar"/>
+        <result column="description" property="description"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="max_members" property="maxMembers"/>
+        <result column="member_count" property="memberCount"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="ownerName" property="ownerName"/>
+    </resultMap>
+
+    <select id="selectPageList" resultMap="MeetingGroupResultMap">
+        SELECT g.*, u.real_name as ownerName
+        FROM meeting_group g
+        LEFT JOIN sys_user u ON g.owner_id = u.id
+        <where>
+            <if test="params.keyword != null and params.keyword != ''">
+                AND (g.group_name LIKE CONCAT('%', #{params.keyword}, '%') OR g.group_code LIKE CONCAT('%', #{params.keyword}, '%'))
+            </if>
+            <if test="params.status != null">
+                AND g.status = #{params.status}
+            </if>
+        </where>
+        ORDER BY g.create_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meeting.mapper.MeetingAttendeeMapper">
+
+    <resultMap id="MeetingAttendeeResultMap" type="com.meeting.entity.MeetingAttendee">
+        <id column="id" property="id"/>
+        <result column="meeting_id" property="meetingId"/>
+        <result column="user_id" property="userId"/>
+        <result column="status" property="status"/>
+        <result column="sign_time" property="signTime"/>
+        <result column="sign_method" property="signMethod"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="MeetingAttendeeWithUserMap" type="com.meeting.entity.MeetingAttendee" extends="MeetingAttendeeResultMap">
+        <association property="user" javaType="com.meeting.entity.SysUser">
+            <id column="user_id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="real_name" property="realName"/>
+            <result column="phone" property="phone"/>
+            <result column="email" property="email"/>
+            <result column="avatar" property="avatar"/>
+            <result column="dept_id" property="deptId"/>
+            <result column="position" property="position"/>
+            <result column="user_type" property="userType"/>
+        </association>
+    </resultMap>
+
+    <!-- 查询会议参会人员列表（带用户信息） -->
+    <select id="findByMeetingIdWithUser" resultMap="MeetingAttendeeWithUserMap">
+        SELECT 
+            ma.id, ma.meeting_id, ma.user_id, ma.status, ma.sign_time, ma.sign_method, ma.remark,
+            u.username, u.real_name, u.phone, u.email, u.avatar, u.dept_id, u.position, u.user_type
+        FROM meeting_attendee ma
+        LEFT JOIN sys_user u ON ma.user_id = u.id
+        WHERE ma.meeting_id = #{meetingId}
+        ORDER BY ma.status ASC, u.real_name ASC
+    </select>
+
+    <!-- 查询用户参加的会议列表 -->
+    <select id="findByUserId" resultMap="MeetingAttendeeResultMap">
+        SELECT * FROM meeting_attendee WHERE user_id = #{userId} ORDER BY create_time DESC
+    </select>
+
+    <!-- 统计会议签到情况 -->
+    <select id="countByMeetingId" resultType="map">
+        SELECT 
+            COUNT(*) as totalCount,
+            SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as signedCount,
+            SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as lateCount,
+            SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END) as absenceCount,
+            SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as notSignedCount
+        FROM meeting_attendee 
+        WHERE meeting_id = #{meetingId}
+    </select>
+</mapper>

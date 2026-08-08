@@ -1,0 +1,267 @@
+<!--pages/group/detail.wxml-->
+<view class="chat-page">
+  <!-- 群头部 -->
+  <view class="chat-header" wx:if="{{group}}">
+    <view class="header-main">
+      <view class="avatar-circle" style="background:{{avatarGradient}}">
+        <text>{{groupInitial}}</text>
+      </view>
+      <view class="header-info">
+        <view class="group-name">{{group.groupName}}</view>
+        <view class="group-sub">
+          <text>{{group.memberCount}} 位成员</text>
+          <text class="sub-dot">·</text>
+          <text>{{group.description || '暂无群简介'}}</text>
+        </view>
+      </view>
+      <text class="code-badge">编号 {{group.groupCode}}</text>
+    </view>
+    <view class="header-actions">
+      <view class="header-btn primary" bindtap="showQrcode">群二维码</view>
+      <view class="header-btn" bindtap="showMoreMenu" wx:if="{{isManager}}">管理群组</view>
+    </view>
+  </view>
+
+  <!-- 功能Tab（成员/会议/签到） -->
+  <view class="segment-bar">
+    <view class="segment-item {{activeSegment === 'chat' ? 'active' : ''}}" bindtap="switchSegment" data-segment="chat">
+      <text>聊天</text>
+    </view>
+    <view class="segment-item {{activeSegment === 'meetings' ? 'active' : ''}}" bindtap="switchSegment" data-segment="meetings">
+      <text>会议</text>
+      <text class="segment-badge" wx:if="{{meetings.length}}">{{meetings.length}}</text>
+    </view>
+    <view class="segment-item {{activeSegment === 'checkin' ? 'active' : ''}}" bindtap="switchSegment" data-segment="checkin">
+      <text>签到</text>
+    </view>
+    <view class="segment-item {{activeSegment === 'members' ? 'active' : ''}}" bindtap="switchSegment" data-segment="members">
+      <text>成员</text>
+    </view>
+  </view>
+
+  <!-- 聊天视图 -->
+  <view class="segment-body" wx:if="{{activeSegment === 'chat'}}">
+    <scroll-view class="message-scroll" scroll-y="true" scroll-into-view="{{scrollIntoId}}" scroll-with-animation="true">
+      <view class="msg-list">
+        <block wx:for="{{messages}}" wx:key="id">
+          <!-- 系统消息 -->
+          <view class="msg-row system" wx:if="{{item.type === 'system'}}">
+            <view class="system-bubble">{{item.content}}</view>
+          </view>
+          <!-- 自己 -->
+          <view class="msg-row self" wx:elif="{{item.userId === userId}}">
+            <view class="msg-content">
+              <view class="msg-meta-row self">
+                <text class="msg-name">{{item.userName || '我'}}</text>
+                <text class="msg-time">{{item.timeText}}</text>
+              </view>
+              <!-- 文本 -->
+              <view class="msg-bubble self" wx:if="{{item.type === 'text'}}">{{item.content}}</view>
+              <!-- 会议卡片 -->
+              <view class="card-meeting" wx:elif="{{item.type === 'meeting'}}" bindtap="openMeetingFromCard" data-extra="{{item.extra}}">
+                <view class="card-left meeting-icon-icon"></view>
+                <view class="card-body">
+                  <view class="card-title">{{item.extraObj.title || item.content}}</view>
+                  <view class="card-meta">{{item.extraObj.startTimeText}} · {{item.extraObj.location || '地点待定'}}</view>
+                  <view class="card-tag status-{{item.extraObj.status}}">{{item.extraObj.statusText}}</view>
+                </view>
+                <view class="card-arrow">›</view>
+              </view>
+              <!-- 签到卡片 -->
+              <view class="card-checkin" wx:elif="{{item.type === 'checkin'}}" bindtap="openCheckinFromCard" data-extra="{{item.extra}}" data-extra-obj="{{item.extraObj}}">
+                <view class="card-left checkin-icon-icon"></view>
+                <view class="card-body">
+                  <view class="card-title">{{item.extraObj.title || item.content}}</view>
+                  <view class="card-meta">会议时间：{{item.extraObj.startTimeText || '-'}}</view>
+                  <view class="card-meta">签到截止：{{item.extraObj.checkinEndTimeText || '-'}}</view>
+                  <view class="card-meta" wx:if="{{item.extraObj.location}}">地点：{{item.extraObj.location}}</view>
+                  <view class="card-meta">签到方式：{{item.extraObj.signMethodsText}}</view>
+                  <view class="card-action-row">
+                    <view class="card-action">立即签到</view>
+                    <view class="card-action makeup-btn" catchtap="openMakeupApply" data-extra="{{item.extra}}" data-extra-obj="{{item.extraObj}}" wx:if="{{!isManager}}">申请补签</view>
+                  </view>
+                </view>
+                <view class="card-arrow">›</view>
+              </view>
+            </view>
+            <view class="msg-avatar" style="background:{{selfAvatarBg}}">{{avatarChar}}</view>
+          </view>
+          <!-- 他人 -->
+          <view class="msg-row" wx:else>
+            <view class="msg-avatar" style="background:{{item.avatarBg}}">{{item.avatarChar}}</view>
+            <view class="msg-content">
+              <view class="msg-meta-row">
+                <text class="msg-name">{{item.userName || '未知用户'}}</text>
+                <text class="msg-time">{{item.timeText}}</text>
+              </view>
+              <view class="msg-bubble" wx:if="{{item.type === 'text'}}">{{item.content}}</view>
+              <view class="card-meeting" wx:elif="{{item.type === 'meeting'}}" bindtap="openMeetingFromCard" data-extra="{{item.extra}}">
+                <view class="card-left meeting-icon-icon"></view>
+                <view class="card-body">
+                  <view class="card-title">{{item.extraObj.title || item.content}}</view>
+                  <view class="card-meta">{{item.extraObj.startTimeText}} · {{item.extraObj.location || '地点待定'}}</view>
+                  <view class="card-tag status-{{item.extraObj.status}}">{{item.extraObj.statusText}}</view>
+                </view>
+                <view class="card-arrow">›</view>
+              </view>
+              <view class="card-checkin" wx:elif="{{item.type === 'checkin'}}" bindtap="openCheckinFromCard" data-extra="{{item.extra}}" data-extra-obj="{{item.extraObj}}">
+                <view class="card-left checkin-icon-icon"></view>
+                <view class="card-body">
+                <view class="card-title">{{item.extraObj.title || item.content}}</view>
+                <view class="card-meta">会议时间：{{item.extraObj.startTimeText || '-'}}</view>
+                <view class="card-meta">签到截止：{{item.extraObj.checkinEndTimeText || '-'}}</view>
+                <view class="card-meta" wx:if="{{item.extraObj.location}}">地点：{{item.extraObj.location}}</view>
+                <view class="card-meta">签到方式：{{item.extraObj.signMethodsText}}</view>
+                  <view class="card-action-row">
+                    <view class="card-action">立即签到</view>
+                    <view class="card-action makeup-btn" catchtap="openMakeupApply" data-extra="{{item.extra}}" data-extra-obj="{{item.extraObj}}" wx:if="{{!isManager}}">申请补签</view>
+                  </view>
+                </view>
+                <view class="card-arrow">›</view>
+              </view>
+            </view>
+          </view>
+        </block>
+        <view class="polling-tip" wx:if="{{polling}}">消息同步中…</view>
+        <view id="scroll-bottom"></view>
+      </view>
+    </scroll-view>
+
+    <!-- 工具栏 -->
+    <view class="chat-toolbar">
+      <view class="tool-row">
+        <view class="tool-btn {{!isManager?'disabled':''}}" bindtap="handleTool" data-tool="checkin">
+          <view class="tool-icon checkin-icon"></view>
+          <text>签到</text>
+        </view>
+        <view class="tool-btn {{!isManager?'disabled':''}}" bindtap="handleTool" data-tool="card">
+          <view class="tool-icon meeting-icon"></view>
+          <text>会议卡片</text>
+        </view>
+        <view class="tool-btn {{!isManager?'disabled':''}}" bindtap="handleTool" data-tool="create">
+          <view class="tool-icon plus-icon"></view>
+          <text>发起会议</text>
+        </view>
+        <view class="tool-btn" bindtap="handleTool" data-tool="qr">
+          <view class="tool-icon qr-icon"></view>
+          <text>二维码</text>
+        </view>
+      </view>
+      <view class="input-row">
+        <input class="msg-input" placeholder="输入消息…" value="{{inputText}}" bindinput="onInput" bindconfirm="sendMessage" confirm-type="send" />
+        <button class="send-btn {{sending?'disabled':''}}" bindtap="sendMessage" disabled="{{sending || !inputText}}">发送</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 会议列表 -->
+  <view class="segment-body list-body" wx:elif="{{activeSegment === 'meetings'}}">
+    <view wx:if="{{meetings.length === 0}}" class="empty-box">
+      <text>暂无会议</text>
+      <button size="mini" type="primary" bindtap="goCreateMeeting" wx:if="{{isManager}}">立即发起</button>
+    </view>
+    <view wx:else>
+      <view class="m-card" wx:for="{{meetings}}" wx:key="id">
+        <view class="m-card-main" bindtap="openMeeting" data-id="{{item.id}}">
+          <view class="m-title">{{item.title}}</view>
+          <view class="m-meta">{{item.startTimeText}} · {{item.location || '地点待定'}}</view>
+        </view>
+        <view class="m-foot">
+          <view class="m-tag status-{{item.status}}">{{statusText[item.status]}}</view>
+          <view class="m-actions">
+            <text class="link-btn" bindtap="stopBubbleOpenCheckin" wx:if="{{isManager && item.status >= 1}}" data-id="{{item.id}}">发布签到</text>
+            <text class="link-btn" bindtap="openMeeting" data-id="{{item.id}}">详情</text>
+            <text class="link-btn danger" bindtap="confirmDeleteMeeting" wx:if="{{isManager}}" data-id="{{item.id}}" data-title="{{item.title}}">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我的签到记录 -->
+  <view class="segment-body list-body" wx:elif="{{activeSegment === 'checkin'}}">
+    <view wx:if="{{myCheckinRecords.length === 0}}" class="empty-box">
+      <text>暂无签到记录</text>
+    </view>
+    <view wx:else>
+      <view class="ci-card" wx:for="{{myCheckinRecords}}" wx:key="id">
+        <view class="ci-left status-{{item.signStatus}}"></view>
+        <view class="ci-body">
+          <view class="ci-title">{{item.meetingTitle}}</view>
+          <view class="ci-meta">
+            方式：{{item.signMethodText}}
+            · {{item.signTime}}
+          </view>
+        </view>
+        <view class="ci-tag status-{{item.signStatus}}">{{item.signStatusText}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成员列表 -->
+  <view class="segment-body list-body" wx:elif="{{activeSegment === 'members'}}">
+    <view class="member-item" wx:for="{{members}}" wx:key="userId">
+      <view class="m-avatar" style="background:{{item.avatarBg}}">{{item.avatarChar}}</view>
+      <view class="m-body">
+        <view class="m-name">
+          {{item.userName}}
+          <text wx:if="{{item.role === 3}}" class="role-tag owner">群主</text>
+          <text wx:elif="{{item.role === 2}}" class="role-tag admin">管理员</text>
+        </view>
+        <view class="m-dept">{{item.position || '普通成员'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选择会议 -->
+  <view class="modal-mask" wx:if="{{pickMeetingShow}}" catchtouchmove="noop" bindtap="closePickModal">
+    <view class="modal-box" catchtap="noop">
+      <view class="modal-title">{{pickMode === 'checkin' ? '选择会议发布签到' : '选择会议发送卡片'}}</view>
+      <view class="pick-list">
+        <view class="pick-item {{pickedIdx === index ? 'selected' : ''}}"
+              wx:for="{{meetings}}" wx:key="id"
+              bindtap="pickMeetingItem" data-idx="{{index}}">
+          {{item.title}}
+        </view>
+      </view>
+      <view wx:if="{{meetings.length === 0}}" class="empty-box">
+        <text>请先创建会议</text>
+      </view>
+      <view class="modal-actions">
+        <button size="mini" bindtap="closePickModal">取消</button>
+        <button size="mini" type="primary" bindtap="confirmPickMeeting" disabled="{{pickedIdx < 0}}">确认</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 二维码 -->
+  <view class="modal-mask" wx:if="{{qrcodeShow}}" catchtouchmove="noop" bindtap="closeQrcode">
+    <view class="modal-box qr-box" catchtap="noop">
+      <view class="modal-title">群二维码 · 扫码加入</view>
+      <image wx:if="{{groupQrcodeImg}}" class="qr-img" src="{{groupQrcodeImg}}" mode="aspectFit"></image>
+      <view class="qr-tip">
+        <view>群名称：{{group.groupName}}</view>
+        <view>群编号：{{group.groupCode}}</view>
+      </view>
+      <button size="mini" bindtap="closeQrcode">关闭</button>
+    </view>
+  </view>
+
+  <!-- 更多操作菜单 -->
+  <view class="modal-mask" wx:if="{{moreMenuShow}}" catchtouchmove="noop" bindtap="closeMoreMenu">
+    <view class="modal-box more-box" catchtap="noop">
+      <view class="modal-title">更多操作</view>
+      <view class="more-list">
+        <view class="more-item" bindtap="confirmClearMessages">
+          <text class="more-icon">清</text>
+          <text>清空聊天记录</text>
+        </view>
+        <view class="more-item danger" bindtap="confirmClearMeetings">
+          <text class="more-icon">会</text>
+          <text>清空会议记录</text>
+        </view>
+      </view>
+      <button size="mini" bindtap="closeMoreMenu" style="margin-top:20rpx;">取消</button>
+    </view>
+  </view>
+</view>

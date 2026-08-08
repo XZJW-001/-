@@ -1,0 +1,60 @@
+// ============================================
+// 设计令牌 (Design Tokens) - 商务简洁风格
+// 统一管理颜色、阴影、圆角、间距等设计变量
+// ============================================
+
+// 主题色
+$color-primary: #1D4ED8;
+$color-primary-light: #3B82F6;
+$color-primary-dark: #173EA5;
+$color-primary-bg: #EEF4FF;
+
+// 功能色
+$color-success: #0F766E;
+$color-success-bg: #ECFDF8;
+$color-warning: #B45309;
+$color-warning-bg: #FFF7E8;
+$color-danger: #BE3654;
+$color-danger-bg: #FFF1F4;
+$color-info: #596579;
+$color-info-bg: #F1F4F8;
+
+// 文字色
+$text-primary: #18212F;
+$text-regular: #354052;
+$text-secondary: #687386;
+$text-placeholder: #98A2B3;
+
+// 边框色
+$border-base: #CDD5DF;
+$border-light: #E1E6ED;
+$border-lighter: #E9EDF2;
+$border-extra-light: #F0F3F7;
+
+// 背景色
+$bg-base: #F4F6F8;
+$bg-white: #FFFFFF;
+$bg-soft: #F8FAFC;
+
+// 阴影
+$shadow-base: 0 1px 2px rgba(16, 24, 40, 0.05);
+$shadow-light: 0 2px 8px rgba(16, 24, 40, 0.06);
+$shadow-hover: 0 10px 24px rgba(16, 24, 40, 0.09);
+
+// 圆角
+$radius-small: 4px;
+$radius-base: 8px;
+$radius-large: 8px;
+$radius-round: 20px;
+
+// 间距
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 20px;
+$spacing-xl: 24px;
+$spacing-xxl: 32px;
+
+// 过渡
+$transition-base: all 0.24s cubic-bezier(0.2, 0, 0, 1);
+$transition-fast: all 0.16s ease-out;

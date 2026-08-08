@@ -1,0 +1,61 @@
+{
+  "pages": [
+    "pages/group/group",
+    "pages/group/detail",
+    "pages/meeting/detail",
+    "pages/checkin/checkin",
+    "pages/proxy/proxy",
+    "pages/scan/scan",
+    "pages/profile/profile",
+    "pages/login/login",
+    "pages/statistics/statistics",
+    "pages/smart/smart",
+    "pages/guest/guest"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1D4ED8",
+    "navigationBarTitleText": "群聊签到",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F6F7FB"
+  },
+  "tabBar": {
+    "color": "#909399",
+    "selectedColor": "#1D4ED8",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/group/group",
+        "text": "群聊",
+        "iconPath": "images/group.png",
+        "selectedIconPath": "images/group-active.png"
+      },
+      {
+        "pagePath": "pages/scan/scan",
+        "text": "扫一扫",
+        "iconPath": "images/scan.png",
+        "selectedIconPath": "images/scan-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/profile.png",
+        "selectedIconPath": "images/profile-active.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于会议签到定位验证"
+    },
+    "scope.camera": {
+      "desc": "用于扫码签到"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation", "chooseLocation"],
+  "requiredBackgroundModes": ["location"],
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

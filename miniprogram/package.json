@@ -1,0 +1,19 @@
+{
+  "name": "meeting-checkin-miniprogram",
+  "version": "1.0.0",
+  "description": "会议签到小程序",
+  "dependencies": {
+    "@babel/runtime": "^7.24.0"
+  },
+  "main": "app.js",
+  "devDependencies": {
+    "sharp": "^0.35.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

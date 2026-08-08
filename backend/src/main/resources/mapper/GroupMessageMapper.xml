@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meeting.mapper.GroupMessageMapper">
+
+    <resultMap id="GroupMessageResultMap" type="com.meeting.entity.GroupMessage">
+        <id column="id" property="id"/>
+        <result column="group_id" property="groupId"/>
+        <result column="user_id" property="userId"/>
+        <result column="type" property="type"/>
+        <result column="content" property="content"/>
+        <result column="extra" property="extra"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <resultMap id="GroupMessageWithUserMap" type="com.meeting.entity.GroupMessage" extends="GroupMessageResultMap">
+        <association property="user" javaType="com.meeting.entity.SysUser">
+            <id column="user_id" property="id"/>
+            <result column="real_name" property="realName"/>
+            <result column="avatar" property="avatar"/>
+            <result column="user_type" property="userType"/>
+        </association>
+    </resultMap>
+
+    <select id="findMessagesWithUser" resultMap="GroupMessageWithUserMap">
+        SELECT
+            gm.id, gm.group_id, gm.user_id, gm.type, gm.content, gm.extra, gm.create_time,
+            u.real_name, u.avatar, u.user_type
+        FROM group_message gm
+        LEFT JOIN sys_user u ON gm.user_id = u.id
+        WHERE gm.group_id = #{groupId}
+        ORDER BY gm.id DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="findLatestMessages" resultMap="GroupMessageWithUserMap">
+        SELECT
+            gm.id, gm.group_id, gm.user_id, gm.type, gm.content, gm.extra, gm.create_time,
+            u.real_name, u.avatar, u.user_type
+        FROM group_message gm
+        LEFT JOIN sys_user u ON gm.user_id = u.id
+        WHERE gm.group_id = #{groupId} AND gm.id > #{lastId}
+        ORDER BY gm.id ASC
+    </select>
+</mapper>

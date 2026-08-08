@@ -1,0 +1,152 @@
+<view class="proxy-page page-shell">
+  <view class="page-heading">
+    <text class="page-kicker">签到协作</text>
+    <view class="page-title">代签申请</view>
+    <view class="page-desc">选择同一会议的参会人代为签到</view>
+  </view>
+
+  <view class="segment-control">
+    <view class="segment-item {{activeTab === 'apply' ? 'active' : ''}}" bindtap="switchTab" data-tab="apply">提交申请</view>
+    <view class="segment-item {{activeTab === 'records' ? 'active' : ''}}" bindtap="switchTab" data-tab="records">
+      申请记录
+      <text class="segment-badge" wx:if="{{applicationStats.pending}}">{{applicationStats.pending}}</text>
+    </view>
+  </view>
+
+  <block wx:if="{{activeTab === 'apply'}}">
+    <view class="section-card application-card">
+      <view class="section-heading compact">
+        <view>
+          <view class="section-title">申请信息</view>
+          <view class="section-desc">仅显示当前可申请代签的会议</view>
+        </view>
+        <view class="tag tag-primary">待审批</view>
+      </view>
+
+      <view class="loading-inline" wx:if="{{loadingMeetings}}">
+        <view class="loading-spinner small"></view>
+        <text>正在加载会议</text>
+      </view>
+
+      <block wx:else>
+        <view class="form-item">
+          <text class="form-label">会议</text>
+          <picker range="{{meetings}}" range-key="title" value="{{selectedMeetingIndex}}" bindchange="onMeetingChange" disabled="{{!meetings.length}}">
+            <view class="form-picker {{selectedMeeting ? '' : 'placeholder'}}">
+              <text>{{selectedMeeting ? selectedMeeting.title : (meetings.length ? '请选择会议' : '暂无可申请会议')}}</text>
+              <text class="picker-arrow">⌄</text>
+            </view>
+          </picker>
+        </view>
+
+        <view class="meeting-summary" wx:if="{{selectedMeeting}}">
+          <view class="summary-line">
+            <text class="summary-label">会议地点</text>
+            <text class="summary-value">{{selectedMeeting.location || '待定'}}</text>
+          </view>
+          <view class="summary-line">
+            <text class="summary-label">开始时间</text>
+            <text class="summary-value">{{selectedMeeting.startTimeText || '-'}}</text>
+          </view>
+          <view class="summary-line">
+            <text class="summary-label">签到截止</text>
+            <text class="summary-value">{{selectedMeeting.checkinEndTimeText || '未设置'}}</text>
+          </view>
+        </view>
+
+        <view class="form-item candidate-field" wx:if="{{selectedMeeting}}">
+          <text class="form-label">代签人</text>
+          <view class="loading-inline compact" wx:if="{{loadingCandidates}}">
+            <view class="loading-spinner small"></view>
+            <text>正在加载参会人</text>
+          </view>
+          <view class="candidate-list" wx:elif="{{candidates.length}}">
+            <view
+              class="candidate-item {{selectedProxyUserId === item.id ? 'selected' : ''}}"
+              wx:for="{{candidates}}"
+              wx:key="id"
+              bindtap="selectCandidate"
+              data-id="{{item.id}}"
+            >
+              <view class="candidate-avatar">
+                <image wx:if="{{item.avatar}}" src="{{item.avatar}}" mode="aspectFill" />
+                <text wx:else>{{item.initial}}</text>
+              </view>
+              <view class="candidate-copy">
+                <view class="candidate-name">{{item.realName || '未命名用户'}}</view>
+                <view class="candidate-meta">{{item.position || '参会人员'}} · 剩余可代签 {{item.remainingQuota}} 人</view>
+              </view>
+              <view class="radio-mark"><view></view></view>
+            </view>
+          </view>
+          <view class="empty-candidates" wx:else>当前会议暂无可选代签人</view>
+        </view>
+
+        <view class="form-item reason-field" wx:if="{{selectedMeeting}}">
+          <view class="label-row">
+            <text class="form-label">申请原因</text>
+            <text class="character-count">{{reasonLength}}/500</text>
+          </view>
+          <textarea
+            class="form-textarea"
+            value="{{reason}}"
+            maxlength="500"
+            placeholder="请填写无法本人签到的具体原因"
+            placeholder-class="textarea-placeholder"
+            bindinput="onReasonInput"
+          ></textarea>
+        </view>
+
+        <view
+          class="btn btn-primary btn-block {{!selectedMeeting || !selectedProxyUserId || !reasonLength || submitting ? 'btn-disabled' : ''}}"
+          bindtap="submitApplication"
+        >{{submitting ? '正在提交...' : '提交代签申请'}}</view>
+      </block>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="status-overview">
+      <view><text class="status-number">{{applicationStats.pending}}</text><text>待审批</text></view>
+      <view class="approved"><text class="status-number">{{applicationStats.approved}}</text><text>已通过</text></view>
+      <view class="finished"><text class="status-number">{{applicationStats.finished}}</text><text>驳回/撤销</text></view>
+    </view>
+
+    <view class="loading-state" wx:if="{{loadingApplications}}">
+      <view class="loading-spinner"></view>
+      <text>正在加载申请记录</text>
+    </view>
+
+    <view class="application-list" wx:elif="{{applications.length}}">
+      <view class="application-item" wx:for="{{applications}}" wx:key="id">
+        <view class="application-head">
+          <view class="application-title">{{item.meetingTitle}}</view>
+          <view class="tag tag-{{item.statusClass}}">{{item.statusText}}</view>
+        </view>
+        <view class="application-detail">
+          <view class="detail-row"><text class="detail-label">代签人</text><text class="detail-value">{{item.proxyUserName}}</text></view>
+          <view class="detail-row"><text class="detail-label">提交时间</text><text class="detail-value">{{item.createTimeText}}</text></view>
+        </view>
+        <view class="reason-box">
+          <text>申请原因</text>
+          <view>{{item.reason}}</view>
+        </view>
+        <view class="approval-result" wx:if="{{item.status === 1 || item.status === 2}}">
+          <view class="detail-row"><text class="detail-label">审批人</text><text class="detail-value">{{item.approverName || '-'}}</text></view>
+          <view class="detail-row"><text class="detail-label">审批时间</text><text class="detail-value">{{item.approveTimeText || '-'}}</text></view>
+          <view class="approval-remark" wx:if="{{item.approveRemark}}">审批说明：{{item.approveRemark}}</view>
+        </view>
+        <view class="application-actions" wx:if="{{item.canCancel}}">
+          <view class="cancel-button" bindtap="cancelApplication" data-id="{{item.id}}" data-title="{{item.meetingTitle}}">撤销申请</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-card empty-records" wx:else>
+      <view class="empty-symbol">申</view>
+      <view class="empty-title">暂无代签申请</view>
+      <view class="empty-desc">提交后可在这里查看审批进度</view>
+      <view class="empty-action" bindtap="switchTab" data-tab="apply">去申请</view>
+    </view>
+  </block>
+</view>

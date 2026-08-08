@@ -1,0 +1,75 @@
+<view class="scan-page page-shell">
+  <view class="page-heading">
+    <text class="page-kicker">快捷签到</text>
+    <view class="page-title">扫一扫签到</view>
+    <view class="page-desc">扫描会议二维码，系统将自动识别会议并进入签到流程</view>
+  </view>
+
+  <view class="scan-panel">
+    <view class="scan-box" bindtap="startCameraScan">
+      <view class="scan-line"></view>
+      <view class="scan-corner tl"></view>
+      <view class="scan-corner tr"></view>
+      <view class="scan-corner bl"></view>
+      <view class="scan-corner br"></view>
+      <view class="scan-center">
+        <image class="scan-symbol" src="/images/scan.svg" mode="aspectFit"></image>
+        <view class="scan-tip-title">对准二维码区域</view>
+        <view class="scan-tip-text">点击扫描框打开相机</view>
+      </view>
+    </view>
+    <button class="scan-primary" bindtap="startCameraScan">打开相机扫码</button>
+    <button class="scan-reset" bindtap="reset" wx:if="{{scanResult}}">重新扫描</button>
+  </view>
+
+  <view class="result-area" wx:if="{{scanResult}}">
+    <view class="result-status">
+      <text class="status-mark">✓</text>
+      <text>已识别扫码内容</text>
+    </view>
+    <view class="result-content">{{scanResult}}</view>
+  </view>
+
+  <view class="quick-actions">
+    <view class="section-heading">
+      <view>
+        <view class="section-title">其他签到方式</view>
+        <view class="section-desc">根据会议要求完成身份验证</view>
+      </view>
+    </view>
+    <view class="action-grid">
+      <view class="action-item" bindtap="goToCheckin" data-method="photo">
+        <view class="action-mark photo">拍</view>
+        <view class="action-copy">
+          <view class="action-title">拍照签到</view>
+          <view class="action-desc">上传现场照片</view>
+        </view>
+        <view class="action-arrow">›</view>
+      </view>
+      <view class="action-item" bindtap="goToCheckin" data-method="location">
+        <view class="action-mark location">位</view>
+        <view class="action-copy">
+          <view class="action-title">定位签到</view>
+          <view class="action-desc">验证当前位置</view>
+        </view>
+        <view class="action-arrow">›</view>
+      </view>
+      <view class="action-item" bindtap="goToCheckin" data-method="gesture">
+        <view class="action-mark gesture">手</view>
+        <view class="action-copy">
+          <view class="action-title">手势签到</view>
+          <view class="action-desc">绘制会议手势</view>
+        </view>
+        <view class="action-arrow">›</view>
+      </view>
+      <view class="action-item" bindtap="goToCheckin" data-method="qrcode">
+        <view class="action-mark qrcode">码</view>
+        <view class="action-copy">
+          <view class="action-title">二维码校验</view>
+          <view class="action-desc">输入会议后验证</view>
+        </view>
+        <view class="action-arrow">›</view>
+      </view>
+    </view>
+  </view>
+</view>

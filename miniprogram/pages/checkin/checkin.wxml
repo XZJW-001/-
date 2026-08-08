@@ -1,0 +1,160 @@
+<view class="checkin-page container">
+  <view class="loading-state" wx:if="{{loading && !meetingInfo}}">
+    <view class="loading-spinner"></view>
+    <text>正在加载签到任务</text>
+  </view>
+
+  <block wx:if="{{meetingInfo}}">
+    <view class="page-heading checkin-heading">
+      <text class="page-kicker">签到任务</text>
+      <view class="heading-row">
+        <view class="page-title">{{meetingInfo.title}}</view>
+        <view class="tag tag-{{meetingInfo.status === 2 ? 'success' : meetingInfo.status === 1 ? 'primary' : 'info'}}">
+          {{meetingInfo.status === 2 ? '进行中' : meetingInfo.status === 1 ? '已发布' : '已结束'}}
+        </view>
+      </view>
+      <view class="page-desc">确认会议信息后，选择指定方式完成验证</view>
+    </view>
+
+    <view class="section-card meeting-summary">
+      <view class="security-badges" wx:if="{{featureConfig.dynamicQrEnabled || featureConfig.offlineAllowed}}">
+        <view class="tag tag-primary" wx:if="{{featureConfig.dynamicQrEnabled}}">动态码</view>
+        <view class="tag tag-success" wx:if="{{featureConfig.offlineAllowed}}">弱网可用</view>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">会议地点</text>
+        <text class="summary-value">{{meetingInfo.location || '未设置'}}</text>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">会议时间</text>
+        <text class="summary-value">{{meetingInfo.startTime}} - {{meetingInfo.endTime}}</text>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">签到时段</text>
+        <text class="summary-value">{{meetingInfo.checkinStartTime}} - {{meetingInfo.checkinEndTime}}</text>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-heading">
+        <view>
+          <view class="section-title">选择签到方式</view>
+          <view class="section-desc">会议支持以下验证方式</view>
+        </view>
+      </view>
+      <view class="method-list">
+        <view
+          class="method-item {{selectedMethod === item ? 'active' : ''}}"
+          wx:for="{{signMethods}}"
+          wx:key="*this"
+          bindtap="selectMethod"
+          data-method="{{item}}"
+        >
+          <view class="method-mark">
+            {{item === 'qrcode' ? '码' : item === 'photo' ? '拍' : item === 'gesture' ? '手' : '位'}}
+          </view>
+          <text class="method-name">{{item === 'qrcode' ? '二维码' : item === 'photo' ? '拍照' : item === 'gesture' ? '手势' : '定位'}}</text>
+          <view class="method-check" wx:if="{{selectedMethod === item}}">✓</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-card verify-card">
+      <view class="section-heading">
+        <view>
+          <view class="section-title">签到验证</view>
+          <view class="section-desc">完成验证后即可提交签到</view>
+        </view>
+      </view>
+
+      <view wx:if="{{selectedMethod === 'qrcode'}}" class="verify-box">
+        <view class="verify-mark">码</view>
+        <view class="verify-title">扫描会议二维码</view>
+        <view class="verify-desc">使用相机识别管理员发布的签到二维码</view>
+        <view class="verify-btn {{signData.qrcodeVerified ? 'verified' : ''}}" bindtap="scanQrcode">
+          {{signData.qrcodeVerified ? '✓ 二维码已验证' : '扫描二维码'}}
+        </view>
+      </view>
+
+      <view wx:elif="{{selectedMethod === 'photo'}}" class="verify-box">
+        <view class="verify-mark">拍</view>
+        <view class="verify-title">上传现场照片</view>
+        <view class="verify-desc">拍摄清晰的现场照片作为签到凭证</view>
+        <view class="verify-btn {{signData.photoVerified ? 'verified' : ''}}" bindtap="takePhoto">
+          {{signData.photoVerified ? '✓ 照片已上传' : '拍摄签到照片'}}
+        </view>
+        <image wx:if="{{photoData}}" src="{{photoData}}" class="preview-image" mode="aspectFill" />
+      </view>
+
+      <view wx:elif="{{selectedMethod === 'gesture'}}" class="verify-box gesture-box">
+        <view class="verify-mark">手</view>
+        <view class="verify-title">绘制签到手势</view>
+        <view class="verify-desc">按管理员设置的顺序连接至少 4 个点</view>
+        <view class="gesture-canvas-wrap">
+          <canvas
+            type="2d"
+            id="gestureCanvas"
+            class="gesture-canvas"
+            bindtouchstart="onGestureTouchStart"
+            bindtouchmove="onGestureTouchMove"
+            bindtouchend="onGestureTouchEnd"
+            disable-scroll="true"
+          ></canvas>
+        </view>
+        <view class="gesture-status {{signData.gestureVerified ? 'verified' : (gestureError ? 'error' : '')}}">
+          {{signData.gestureVerified ? '✓ 手势密码正确' : (gestureError ? '✗ 手势密码错误，请重试' : '请按住并滑动绘制手势')}}
+        </view>
+        <view class="verify-btn secondary" bindtap="resetGesture" wx:if="{{!signData.gestureVerified}}">重新绘制</view>
+      </view>
+
+      <view wx:elif="{{selectedMethod === 'location'}}" class="verify-box">
+        <view class="verify-mark">位</view>
+        <view class="verify-title">验证当前位置</view>
+        <view class="verify-desc">授权定位后，系统将核验签到地点</view>
+        <view class="verify-btn {{signData.locationVerified ? 'verified' : ''}}" bindtap="getLocation">
+          {{signData.locationVerified ? '✓ 位置已验证' : '获取当前位置'}}
+        </view>
+        <view wx:if="{{location}}" class="location-info">{{location.address || '已获取位置'}}</view>
+        <view wx:if="{{location}}" class="map-preview">
+          <map
+            class="map-container"
+            longitude="{{location.longitude}}"
+            latitude="{{location.latitude}}"
+            markers="{{markers}}"
+            scale="16"
+            show-location="{{true}}"
+          ></map>
+          <view class="map-coords">经度 {{location.longitude}} · 纬度 {{location.latitude}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-card evidence-card" wx:if="{{featureConfig.requirePhoto || featureConfig.requireLocation}}">
+      <view class="section-heading">
+        <view>
+          <view class="section-title">现场附加验证</view>
+          <view class="section-desc">以下项目必须全部完成</view>
+        </view>
+      </view>
+      <view class="evidence-list">
+        <view class="evidence-row" wx:if="{{featureConfig.requirePhoto}}">
+          <view class="evidence-mark photo">拍</view>
+          <view class="evidence-copy"><strong>现场照片</strong><span>{{signData.photoVerified ? '照片已记录' : '等待拍摄'}}</span></view>
+          <view class="evidence-action {{signData.photoVerified ? 'done' : ''}}" bindtap="takePhoto">{{signData.photoVerified ? '已完成' : '拍照'}}</view>
+        </view>
+        <view class="evidence-row" wx:if="{{featureConfig.requireLocation}}">
+          <view class="evidence-mark location">位</view>
+          <view class="evidence-copy"><strong>会场定位</strong><span>{{signData.locationVerified ? '位置已记录' : '等待定位'}}</span></view>
+          <view class="evidence-action {{signData.locationVerified ? 'done' : ''}}" bindtap="getLocation">{{signData.locationVerified ? '已完成' : '定位'}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="submit-section">
+      <view class="btn btn-primary btn-block {{loading ? 'btn-disabled' : ''}}" bindtap="submitCheckIn">
+        {{loading ? '正在提交...' : '确认签到'}}
+      </view>
+      <view class="btn btn-quiet btn-block reset-btn" bindtap="resetCheckIn">重置验证</view>
+    </view>
+  </block>
+</view>

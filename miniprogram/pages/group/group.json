@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我的群组",
+  "navigationBarBackgroundColor": "#1D4ED8",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true
+}

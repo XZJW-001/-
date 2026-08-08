@@ -1,0 +1,460 @@
+.proxy-page {
+  padding-bottom: calc(56rpx + env(safe-area-inset-bottom));
+}
+
+.segment-control {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6rpx;
+  margin-bottom: 24rpx;
+  padding: 6rpx;
+  border: 1rpx solid var(--border-light);
+  border-radius: var(--radius-base);
+  background: #E9EDF2;
+}
+
+.segment-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  min-height: 72rpx;
+  border-radius: var(--radius-small);
+  color: var(--text-secondary);
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.segment-item.active {
+  background: var(--bg-white);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-base);
+}
+
+.segment-badge {
+  min-width: 34rpx;
+  height: 34rpx;
+  padding: 0 8rpx;
+  border-radius: 17rpx;
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  font-size: 19rpx;
+  line-height: 34rpx;
+  text-align: center;
+}
+
+.application-card {
+  padding-bottom: 28rpx;
+}
+
+.section-heading.compact {
+  margin-bottom: 24rpx;
+}
+
+.section-desc {
+  margin-top: 6rpx;
+  color: var(--text-secondary);
+  font-size: 22rpx;
+}
+
+.form-item:last-of-type {
+  margin-bottom: 32rpx;
+}
+
+.form-label {
+  margin-bottom: 12rpx;
+}
+
+.form-picker {
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.form-picker text:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form-picker.placeholder {
+  color: var(--text-placeholder);
+}
+
+.picker-arrow {
+  flex-shrink: 0;
+  color: var(--text-placeholder);
+  font-size: 30rpx;
+}
+
+.meeting-summary {
+  display: grid;
+  gap: 18rpx;
+  margin: -8rpx 0 28rpx;
+  padding: 24rpx;
+  border-left: 5rpx solid var(--color-primary);
+  border-radius: 0 var(--radius-small) var(--radius-small) 0;
+  background: var(--color-primary-bg);
+}
+
+.summary-line,
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.summary-label,
+.detail-label {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  font-size: 22rpx;
+}
+
+.summary-value,
+.detail-value {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 23rpx;
+  font-weight: 550;
+  text-align: right;
+  word-break: break-all;
+}
+
+.candidate-field {
+  margin-bottom: 28rpx;
+}
+
+.candidate-list {
+  overflow: hidden;
+  border: 1rpx solid var(--border-light);
+  border-radius: var(--radius-base);
+}
+
+.candidate-item {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  min-height: 108rpx;
+  padding: 18rpx 20rpx;
+  border-bottom: 1rpx solid var(--border-extra-light);
+  background: var(--bg-white);
+}
+
+.candidate-item:last-child {
+  border-bottom: 0;
+}
+
+.candidate-item.selected {
+  background: var(--color-primary-bg);
+}
+
+.candidate-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 64rpx;
+  overflow: hidden;
+  border-radius: var(--radius-small);
+  background: #E1E8F5;
+  color: var(--color-primary-dark);
+  font-size: 24rpx;
+  font-weight: 650;
+}
+
+.candidate-avatar image {
+  width: 100%;
+  height: 100%;
+}
+
+.candidate-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.candidate-name {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 26rpx;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.candidate-meta {
+  margin-top: 6rpx;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 21rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radio-mark {
+  width: 34rpx;
+  height: 34rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 34rpx;
+  border: 2rpx solid var(--border-base);
+  border-radius: 50%;
+}
+
+.candidate-item.selected .radio-mark {
+  border-color: var(--color-primary);
+}
+
+.candidate-item.selected .radio-mark view {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.empty-candidates {
+  min-height: 112rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx dashed var(--border-base);
+  border-radius: var(--radius-base);
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  font-size: 23rpx;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.character-count {
+  margin-bottom: 12rpx;
+  color: var(--text-placeholder);
+  font-size: 21rpx;
+}
+
+.form-textarea {
+  height: 190rpx;
+}
+
+.textarea-placeholder {
+  color: var(--text-placeholder);
+}
+
+.loading-inline {
+  min-height: 150rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  color: var(--text-secondary);
+  font-size: 23rpx;
+}
+
+.loading-inline.compact {
+  min-height: 108rpx;
+  border: 1rpx solid var(--border-light);
+  border-radius: var(--radius-base);
+}
+
+.loading-spinner.small {
+  width: 34rpx;
+  height: 34rpx;
+  margin: 0;
+  border-width: 4rpx;
+}
+
+.status-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 24rpx;
+  border: 1rpx solid var(--border-light);
+  border-radius: var(--radius-base);
+  background: var(--bg-white);
+  box-shadow: var(--shadow-base);
+}
+
+.status-overview view {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5rpx;
+  padding: 24rpx 8rpx;
+}
+
+.status-overview view:not(:last-child)::after {
+  position: absolute;
+  top: 24rpx;
+  right: 0;
+  width: 1rpx;
+  height: 58rpx;
+  background: var(--border-extra-light);
+  content: '';
+}
+
+.status-overview .status-number {
+  color: var(--color-warning);
+  font-size: 34rpx;
+}
+
+.status-overview .approved .status-number {
+  color: var(--color-success);
+}
+
+.status-overview .finished .status-number {
+  color: var(--text-secondary);
+}
+
+.status-overview text {
+  color: var(--text-secondary);
+  font-size: 21rpx;
+}
+
+.application-list {
+  display: grid;
+  gap: 20rpx;
+}
+
+.application-item {
+  padding: 28rpx;
+  border: 1rpx solid var(--border-light);
+  border-radius: var(--radius-base);
+  background: var(--bg-white);
+  box-shadow: var(--shadow-base);
+}
+
+.application-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding-bottom: 22rpx;
+  border-bottom: 1rpx solid var(--border-extra-light);
+}
+
+.application-title {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 29rpx;
+  font-weight: 650;
+  line-height: 1.45;
+  word-break: break-all;
+}
+
+.application-head .tag {
+  flex-shrink: 0;
+}
+
+.application-detail,
+.approval-result {
+  display: grid;
+  gap: 14rpx;
+  padding-top: 22rpx;
+}
+
+.reason-box {
+  margin-top: 22rpx;
+  padding: 20rpx;
+  border-radius: var(--radius-small);
+  background: var(--bg-soft);
+}
+
+.reason-box text {
+  color: var(--text-secondary);
+  font-size: 21rpx;
+}
+
+.reason-box view {
+  margin-top: 8rpx;
+  color: var(--text-regular);
+  font-size: 24rpx;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.approval-result {
+  margin-top: 22rpx;
+  border-top: 1rpx solid var(--border-extra-light);
+}
+
+.approval-remark {
+  padding: 16rpx 18rpx;
+  border-left: 4rpx solid var(--border-base);
+  background: var(--color-info-bg);
+  color: var(--text-secondary);
+  font-size: 22rpx;
+  line-height: 1.55;
+}
+
+.application-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 22rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--border-extra-light);
+}
+
+.cancel-button {
+  min-width: 142rpx;
+  min-height: 62rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20rpx;
+  border: 1rpx solid #F2D2DB;
+  border-radius: var(--radius-small);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-size: 23rpx;
+  font-weight: 600;
+}
+
+.empty-records {
+  min-height: 420rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.empty-symbol {
+  width: 84rpx;
+  height: 84rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-base);
+  background: var(--color-info-bg);
+  color: var(--color-info);
+  font-size: 28rpx;
+  font-weight: 650;
+}
+
+.empty-title {
+  margin-top: 22rpx;
+  color: var(--text-primary);
+  font-size: 29rpx;
+  font-weight: 650;
+}
+
+.empty-desc {
+  margin-top: 8rpx;
+  color: var(--text-secondary);
+  font-size: 23rpx;
+}
+
+.empty-action {
+  margin-top: 24rpx;
+  color: var(--color-primary);
+  font-size: 25rpx;
+  font-weight: 600;
+}

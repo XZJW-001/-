@@ -1,0 +1,179 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $text-primary;
+  background-color: $bg-base;
+}
+
+* {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  letter-spacing: 0;
+}
+
+// 页面容器
+.page-container {
+  width: min(100%, 1560px);
+  margin: 0 auto;
+  padding: clamp(16px, 2vw, 28px);
+}
+
+// 页面头部
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+
+  h2 {
+    margin: 0 0 6px 0;
+    font-size: 22px;
+    font-weight: 650;
+    color: $text-primary;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0;
+    color: $text-secondary;
+    font-size: 14px;
+  }
+}
+
+// 卡片容器
+.card-container {
+  background: $bg-white;
+  border-radius: $radius-base;
+  border: 1px solid $border-light;
+  box-shadow: $shadow-base;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  transition: border-color 0.16s ease-out, box-shadow 0.16s ease-out;
+}
+
+// 表格工具栏
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+// 搜索表单
+.search-form {
+  display: flex;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+
+  .el-form-item {
+    margin-bottom: 0;
+  }
+}
+
+.el-button {
+  font-weight: 500;
+  border-radius: $radius-small;
+  min-height: 34px;
+
+  &.el-button--primary {
+    --el-button-bg-color: #{$color-primary};
+    --el-button-border-color: #{$color-primary};
+    --el-button-hover-bg-color: #{$color-primary-dark};
+    --el-button-hover-border-color: #{$color-primary-dark};
+  }
+}
+
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner {
+  border-radius: $radius-small;
+}
+
+.el-dialog {
+  border-radius: $radius-base;
+  box-shadow: 0 24px 64px rgba(16, 24, 40, 0.18);
+
+  .el-dialog__header {
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $border-lighter;
+  }
+
+  .el-dialog__footer {
+    padding-top: $spacing-md;
+    border-top: 1px solid $border-lighter;
+  }
+}
+
+.el-table {
+  --el-table-header-bg-color: #F9FAFB;
+  --el-table-header-text-color: #374151;
+  --el-table-row-hover-bg-color: #F8FAFC;
+  border-radius: $radius-base;
+
+  th.el-table__cell {
+    height: 44px;
+    font-weight: 600;
+  }
+
+  td.el-table__cell {
+    height: 50px;
+  }
+}
+
+.el-tag {
+  border-radius: $radius-small;
+}
+
+.el-tabs__item {
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+
+    .el-button {
+      align-self: flex-start;
+    }
+  }
+
+  .el-dialog {
+    width: calc(100vw - 32px) !important;
+    margin-top: 8vh;
+  }
+}
+
+// 滚动条美化
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $border-base;
+  border-radius: $radius-round;
+  &:hover { background: $text-placeholder; }
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

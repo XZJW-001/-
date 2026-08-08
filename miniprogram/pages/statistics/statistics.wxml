@@ -1,0 +1,113 @@
+<view class="statistics-page page-shell">
+  <view class="page-heading">
+    <text class="page-kicker">出勤分析</text>
+    <view class="page-title">数据统计</view>
+    <view class="page-desc">查看会议签到概览与当前会议出勤分布</view>
+  </view>
+
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>正在加载统计数据</text>
+  </view>
+
+  <block wx:else>
+    <view class="overview-grid">
+      <view class="overview-item">
+        <view class="overview-value">{{overview.totalMeetings}}</view>
+        <view class="overview-label">会议总数</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-value success">{{overview.totalCheckins}}</view>
+        <view class="overview-label">签到总数</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-value">{{overview.totalUsers}}</view>
+        <view class="overview-label">参会人数</view>
+      </view>
+      <view class="overview-item emphasis">
+        <view class="overview-value">{{overview.attendanceRate}}%</view>
+        <view class="overview-label">当前出勤率</view>
+      </view>
+    </view>
+
+    <view class="meeting-filter" wx:if="{{meetingList.length > 0}}">
+      <view class="filter-label">选择会议</view>
+      <scroll-view scroll-x class="meeting-list" enhanced show-scrollbar="{{false}}">
+        <view
+          class="meeting-tag {{currentMeetingId === item.id ? 'active' : ''}}"
+          wx:for="{{meetingList}}"
+          wx:key="id"
+          bindtap="switchMeeting"
+          data-id="{{item.id}}"
+        >
+          {{item.title}}
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="section-card stats-section">
+      <view class="section-heading">
+        <view>
+          <view class="section-title">签到状态</view>
+          <view class="section-desc">当前会议实时统计</view>
+        </view>
+      </view>
+
+      <view class="stats-grid">
+        <view class="stats-item">
+          <view class="stats-mark total">应</view>
+          <view class="stats-info"><view class="stats-num">{{attendanceStats.total || 0}}</view><view class="stats-label">应到</view></view>
+        </view>
+        <view class="stats-item" bindtap="goToDetail" data-type="checked">
+          <view class="stats-mark checked">到</view>
+          <view class="stats-info"><view class="stats-num">{{attendanceStats.checked}}</view><view class="stats-label">已签到</view></view>
+        </view>
+        <view class="stats-item" bindtap="goToDetail" data-type="late">
+          <view class="stats-mark late">迟</view>
+          <view class="stats-info"><view class="stats-num">{{attendanceStats.late}}</view><view class="stats-label">迟到</view></view>
+        </view>
+        <view class="stats-item">
+          <view class="stats-mark makeup">补</view>
+          <view class="stats-info"><view class="stats-num">{{attendanceStats.makeup}}</view><view class="stats-label">补签</view></view>
+        </view>
+        <view class="stats-item">
+          <view class="stats-mark proxy">代</view>
+          <view class="stats-info"><view class="stats-num">{{attendanceStats.proxy}}</view><view class="stats-label">代签</view></view>
+        </view>
+        <view class="stats-item" bindtap="goToDetail" data-type="leave">
+          <view class="stats-mark leave">退</view>
+          <view class="stats-info"><view class="stats-num">{{attendanceStats.leave}}</view><view class="stats-label">早退</view></view>
+        </view>
+        <view class="stats-item wide" bindtap="goToDetail" data-type="absent">
+          <view class="stats-mark absent">缺</view>
+          <view class="stats-info"><view class="stats-num">{{attendanceStats.absent}}</view><view class="stats-label">未签到</view></view>
+        </view>
+      </view>
+
+      <view class="progress-section">
+        <view class="progress-header">
+          <text>出勤率</text>
+          <text class="progress-value">{{overview.attendanceRate}}%</text>
+        </view>
+        <view class="progress-bar"><view class="progress-fill" style="width: {{overview.attendanceRate}}%"></view></view>
+      </view>
+
+      <view class="distribution-chart">
+        <view class="chart-heading">
+          <view class="chart-title">状态分布</view>
+          <view class="chart-unit">单位：人</view>
+        </view>
+        <view class="chart-bars">
+          <view class="bar-item"><view class="bar-fill total" style="height: {{(attendanceStats.total || 0) * 2}}rpx"></view><view class="bar-label">应到</view></view>
+          <view class="bar-item"><view class="bar-fill checked" style="height: {{attendanceStats.checked * 2}}rpx"></view><view class="bar-label">签到</view></view>
+          <view class="bar-item"><view class="bar-fill late" style="height: {{attendanceStats.late * 2}}rpx"></view><view class="bar-label">迟到</view></view>
+          <view class="bar-item"><view class="bar-fill makeup" style="height: {{attendanceStats.makeup * 2}}rpx"></view><view class="bar-label">补签</view></view>
+          <view class="bar-item"><view class="bar-fill proxy" style="height: {{attendanceStats.proxy * 2}}rpx"></view><view class="bar-label">代签</view></view>
+          <view class="bar-item"><view class="bar-fill absent" style="height: {{attendanceStats.absent * 2}}rpx"></view><view class="bar-label">缺席</view></view>
+        </view>
+      </view>
+
+      <button class="export-btn" bindtap="exportReport">导出统计报告</button>
+    </view>
+  </block>
+</view>

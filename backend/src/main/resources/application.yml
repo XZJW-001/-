@@ -1,0 +1,94 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: meeting-checkin
+  
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL:jdbc:mysql://localhost:3306/meeting_checkin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&sessionVariables=sort_buffer_size=4194304}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+  
+  # Redis配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+  # 文件上传
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# MyBatis Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.meeting.entity
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# JWT配置
+jwt:
+  secret: ${JWT_SECRET:meeting-checkin-change-me-in-prod}
+  expiration: ${JWT_EXPIRATION:86400000}  # 24小时
+  header: Authorization
+  prefix: Bearer
+
+# Knife4j配置
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    enable-swagger-models: true
+    enable-document-manage: true
+
+# 应用自定义配置
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+
+  # 二维码配置
+  qrcode:
+    # 默认有效时长（分钟）
+    default-expire: 120
+    # 默认图片宽度
+    default-width: 300
+    # 默认图片高度
+    default-height: 300
+  
+  # 签到配置
+  checkin:
+    # 是否允许补签
+    allow-makeup: true
+    # 补签最大延迟（分钟）
+    makeup-max-delay: 60
+    # 是否允许代签
+    allow-proxy: true
+    # 代签最大人数
+    proxy-max-count: 3
+  
+  # 文件存储
+  storage:
+    path: ./uploads
+    url-prefix: /uploads

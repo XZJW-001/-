@@ -1,0 +1,249 @@
+<!--pages/meeting/detail.wxml-->
+<view class="container">
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- ============ 创建会议模式 ============ -->
+  <block wx:elif="{{mode === 'create'}}">
+    <view class="page-heading">
+      <text class="page-kicker">会议管理</text>
+      <view class="page-title">创建会议</view>
+      <view class="page-desc">填写会议安排，并设置签到时间与验证方式</view>
+    </view>
+
+    <view class="card form-card">
+      <!-- 会议标题 -->
+      <view class="form-item">
+        <text class="form-label">会议标题</text>
+        <input class="form-input" 
+               placeholder="请输入会议标题" 
+               value="{{form.title}}" 
+               data-field="title" 
+               bindinput="onInput" />
+      </view>
+
+      <!-- 会议描述 -->
+      <view class="form-item">
+        <text class="form-label">会议描述</text>
+        <textarea class="form-textarea" 
+                  placeholder="选填，简要描述会议内容" 
+                  value="{{form.description}}" 
+                  data-field="description" 
+                  bindinput="onInput"></textarea>
+      </view>
+
+      <!-- 会议地点 -->
+      <view class="form-item">
+        <text class="form-label">会议地点</text>
+        <input class="form-input" 
+               placeholder="选填，请输入会议地点" 
+               value="{{form.location}}" 
+               data-field="location" 
+               bindinput="onInput" />
+      </view>
+
+      <!-- 会议时间 -->
+      <view class="form-item">
+        <text class="form-label">会议开始时间</text>
+        <view class="form-row">
+          <picker mode="date" value="{{form.startDate}}" data-field="startDate" bindchange="onDateChange">
+            <view class="form-picker">{{form.startDate || '选择日期'}}</view>
+          </picker>
+          <picker mode="time" value="{{form.startTimeOnly}}" data-field="startTimeOnly" bindchange="onTimeOnlyChange">
+            <view class="form-picker">{{form.startTimeOnly || '选择时间'}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">会议结束时间</text>
+        <view class="form-row">
+          <picker mode="date" value="{{form.endDate}}" data-field="endDate" bindchange="onDateChange">
+            <view class="form-picker">{{form.endDate || '选择日期'}}</view>
+          </picker>
+          <picker mode="time" value="{{form.endTimeOnly}}" data-field="endTimeOnly" bindchange="onTimeOnlyChange">
+            <view class="form-picker">{{form.endTimeOnly || '选择时间'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 签到时间 -->
+      <view class="form-item">
+        <text class="form-label">签到时间</text>
+        <view class="checkin-mode-tabs">
+          <view class="mode-tab {{form.checkinMode === 'auto' ? 'active' : ''}}" bindtap="switchCheckinMode" data-mode="auto">快捷设置</view>
+          <view class="mode-tab {{form.checkinMode === 'custom' ? 'active' : ''}}" bindtap="switchCheckinMode" data-mode="custom">自定义</view>
+        </view>
+        <!-- 快捷设置：偏移量 -->
+        <view class="offset-box" wx:if="{{form.checkinMode === 'auto'}}">
+          <view class="offset-line">
+            <text>会议开始前</text>
+            <view class="stepper">
+              <view class="step-btn" bindtap="adjustOffset" data-field="checkinStartOffset" data-delta="-5">-</view>
+              <text class="step-val">{{form.checkinStartOffset}}</text>
+              <view class="step-btn" bindtap="adjustOffset" data-field="checkinStartOffset" data-delta="5">+</view>
+            </view>
+            <text>分钟开始</text>
+          </view>
+          <view class="offset-line">
+            <text>会议开始后</text>
+            <view class="stepper">
+              <view class="step-btn" bindtap="adjustOffset" data-field="checkinEndOffset" data-delta="-5">-</view>
+              <text class="step-val">{{form.checkinEndOffset}}</text>
+              <view class="step-btn" bindtap="adjustOffset" data-field="checkinEndOffset" data-delta="5">+</view>
+            </view>
+            <text>分钟结束</text>
+          </view>
+        </view>
+        <!-- 自定义时间 -->
+        <block wx:else>
+          <view class="form-row" style="margin-top: 8px;">
+            <picker mode="date" value="{{form.checkinStartDate}}" data-field="checkinStartDate" bindchange="onDateChange">
+              <view class="form-picker">{{form.checkinStartDate || '选择日期'}}</view>
+            </picker>
+            <picker mode="time" value="{{form.checkinStartTimeOnly}}" data-field="checkinStartTimeOnly" bindchange="onTimeOnlyChange">
+              <view class="form-picker">{{form.checkinStartTimeOnly || '选择时间'}}</view>
+            </picker>
+          </view>
+          <text class="form-label" style="font-size:12px;color:#909399;margin-top:6px;">签到结束时间</text>
+          <view class="form-row">
+            <picker mode="date" value="{{form.checkinEndDate}}" data-field="checkinEndDate" bindchange="onDateChange">
+              <view class="form-picker">{{form.checkinEndDate || '选择日期'}}</view>
+            </picker>
+            <picker mode="time" value="{{form.checkinEndTimeOnly}}" data-field="checkinEndTimeOnly" bindchange="onTimeOnlyChange">
+              <view class="form-picker">{{form.checkinEndTimeOnly || '选择时间'}}</view>
+            </picker>
+          </view>
+        </block>
+      </view>
+
+      <!-- 迟到阈值 -->
+      <view class="form-item">
+        <text class="form-label">迟到阈值（分钟）</text>
+        <input class="form-input" 
+               type="number" 
+               value="{{form.lateTime}}" 
+               bindinput="onLateTimeChange" />
+      </view>
+
+      <!-- 签到方式 -->
+      <view class="form-item">
+        <text class="form-label">签到方式</text>
+        <view class="method-grid">
+          <view class="method-chip {{item.checked ? 'checked' : ''}}" 
+                wx:for="{{methodOptions}}" 
+                wx:key="value"
+                data-value="{{item.value}}" 
+                bindtap="toggleMethod">
+            <text>{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-section">
+      <view class="btn btn-primary btn-block" bindtap="submitCreate" wx:if="{{!submitting}}">
+        发布会议
+      </view>
+      <view class="btn btn-block btn-disabled" wx:else>
+        提交中...
+      </view>
+      <view class="btn btn-block btn-cancel" bindtap="cancelCreate">
+        取消
+      </view>
+    </view>
+  </block>
+
+  <!-- ============ 查看会议模式 ============ -->
+  <block wx:else>
+    <view class="page-heading meeting-page-heading" wx:if="{{meeting}}">
+      <text class="page-kicker">会议详情</text>
+      <view class="meeting-heading-row">
+        <view class="page-title">{{meeting.title}}</view>
+        <view class="tag tag-{{meeting.status === 2 ? 'success' : meeting.status === 3 ? 'info' : 'warning'}}">
+          {{meeting.status === 0 ? '草稿' : meeting.status === 1 ? '已发布' : meeting.status === 2 ? '进行中' : '已结束'}}
+        </view>
+      </view>
+      <view class="page-desc">查看会议安排、签到方式与出勤数据</view>
+    </view>
+
+    <!-- 会议基本信息 -->
+    <view class="card" wx:if="{{meeting}}">
+      <view class="meeting-desc" wx:if="{{meeting.description}}">{{meeting.description}}</view>
+      
+      <view class="info-grid">
+        <view class="info-item">
+          <text class="info-label">地点</text>
+          <text class="info-value">{{meeting.location || '待定'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">开始时间</text>
+          <text class="info-value">{{meeting.startTime}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">签到开始</text>
+          <text class="info-value">{{meeting.checkinStartTime}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">迟到阈值</text>
+          <text class="info-value">{{meeting.lateTime}}分钟</text>
+        </view>
+      </view>
+
+      <!-- 签到方式 -->
+      <view class="methods-section" wx:if="{{meeting.signMethods.length > 0}}">
+        <text class="section-title">支持的签到方式</text>
+        <view class="method-tags">
+          <view class="tag tag-primary" wx:for="{{meeting.signMethods}}" wx:key="*this">
+            {{item === 'qrcode' ? '二维码' : item === 'photo' ? '拍照' : item === 'gesture' ? '手势' : '定位'}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 签到统计 -->
+    <view class="card" wx:if="{{statistics}}">
+      <view class="card-header">
+        <text class="title">签到统计</text>
+      </view>
+      <view class="stats-row">
+        <view class="stat-item">
+          <view class="stat-value">{{statistics.totalCount || 0}}</view>
+          <view class="stat-label">应到</view>
+        </view>
+        <view class="stat-item success">
+          <view class="stat-value">{{statistics.signedCount || 0}}</view>
+          <view class="stat-label">已签到</view>
+        </view>
+        <view class="stat-item warning">
+          <view class="stat-value">{{statistics.lateCount || 0}}</view>
+          <view class="stat-label">迟到</view>
+        </view>
+        <view class="stat-item danger">
+          <view class="stat-value">{{statistics.notSignedCount || 0}}</view>
+          <view class="stat-label">未签到</view>
+        </view>
+      </view>
+      <!-- 进度条 -->
+      <view class="progress-section">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{statistics.attendanceRate || 0}}%;"></view>
+        </view>
+        <text class="progress-text">出勤率 {{statistics.attendanceRate || 0}}%</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-section" wx:if="{{meeting}}">
+      <view class="btn btn-primary btn-block" bindtap="goToCheckIn" wx:if="{{meeting.status >= 1}}">
+        立即签到
+      </view>
+      <view class="btn btn-success btn-block" bindtap="shareMeeting" wx:if="{{meeting.status >= 1}}">
+        分享会议邀请
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,249 @@
+.login-page {
+  min-height: 100vh;
+  background: var(--bg-white);
+}
+
+.login-hero {
+  position: relative;
+  height: calc(540rpx + env(safe-area-inset-top));
+  overflow: hidden;
+  background: #111820;
+}
+
+.hero-photo,
+.hero-shade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-shade {
+  background: rgba(10, 17, 27, 0.52);
+}
+
+.brand-lockup {
+  position: absolute;
+  top: calc(28rpx + env(safe-area-inset-top));
+  left: 36rpx;
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  color: #fff;
+}
+
+.brand-mark {
+  position: relative;
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: var(--radius-base);
+  background: var(--color-primary);
+}
+
+.corner {
+  position: absolute;
+  width: 16rpx;
+  height: 16rpx;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0;
+}
+
+.corner.top-left { top: 16rpx; left: 16rpx; border-top-width: 3rpx; border-left-width: 3rpx; }
+.corner.top-right { top: 16rpx; right: 16rpx; border-top-width: 3rpx; border-right-width: 3rpx; }
+.corner.bottom-left { bottom: 16rpx; left: 16rpx; border-bottom-width: 3rpx; border-left-width: 3rpx; }
+.corner.bottom-right { right: 16rpx; bottom: 16rpx; border-right-width: 3rpx; border-bottom-width: 3rpx; }
+
+.brand-name {
+  font-size: 28rpx;
+  font-weight: 650;
+}
+
+.brand-en {
+  margin-top: 3rpx;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 17rpx;
+}
+
+.hero-copy {
+  position: absolute;
+  left: 38rpx;
+  bottom: 54rpx;
+  color: #fff;
+}
+
+.hero-kicker {
+  margin-bottom: 16rpx;
+  color: #B9CEFF;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.hero-title {
+  font-size: 54rpx;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.hero-desc {
+  margin-top: 16rpx;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 24rpx;
+}
+
+.login-panel {
+  position: relative;
+  z-index: 2;
+  margin-top: -16rpx;
+  padding: 42rpx 36rpx calc(42rpx + env(safe-area-inset-bottom));
+  border-radius: 16rpx 16rpx 0 0;
+  background: var(--bg-white);
+}
+
+.panel-heading {
+  margin-bottom: 34rpx;
+}
+
+.panel-title {
+  color: var(--text-primary);
+  font-size: 40rpx;
+  font-weight: 650;
+}
+
+.panel-desc {
+  margin-top: 8rpx;
+  color: var(--text-secondary);
+  font-size: 24rpx;
+}
+
+.field-group {
+  margin-bottom: 26rpx;
+}
+
+.field-label {
+  margin-bottom: 12rpx;
+  color: var(--text-regular);
+  font-size: 25rpx;
+  font-weight: 500;
+}
+
+.input-shell {
+  display: flex;
+  align-items: center;
+  height: 92rpx;
+  overflow: hidden;
+  border: 1rpx solid var(--border-base);
+  border-radius: var(--radius-base);
+  background: var(--bg-soft);
+}
+
+.field-mark {
+  width: 62rpx;
+  height: 62rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 14rpx;
+  border-radius: var(--radius-small);
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  font-size: 22rpx;
+  font-weight: 650;
+}
+
+.field-mark.quiet {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 92rpx;
+  padding: 0 20rpx;
+  color: var(--text-primary);
+  font-size: 28rpx;
+}
+
+.placeholder {
+  color: var(--text-placeholder);
+}
+
+.login-btn {
+  margin-top: 34rpx;
+}
+
+.alternative {
+  margin-top: 34rpx;
+}
+
+.divider {
+  position: relative;
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-placeholder);
+  font-size: 21rpx;
+}
+
+.divider::before,
+.divider::after {
+  width: 43%;
+  height: 1rpx;
+  background: var(--border-light);
+  content: '';
+}
+
+.divider text {
+  padding: 0 18rpx;
+}
+
+.wechat-login {
+  height: 84rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14rpx;
+  margin-top: 18rpx;
+  border: 1rpx solid var(--border-light);
+  border-radius: var(--radius-base);
+  background: var(--bg-white);
+  color: var(--text-regular);
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.wechat-mark {
+  width: 42rpx;
+  height: 42rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-small);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  font-size: 19rpx;
+  font-weight: 650;
+}
+
+.security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  margin-top: 28rpx;
+  color: var(--text-placeholder);
+  font-size: 21rpx;
+}
+
+.security-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: var(--color-success);
+}

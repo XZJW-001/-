@@ -1,0 +1,99 @@
+<!--pages/meeting/meeting.wxml-->
+<view class="container">
+  <!-- 顶部操作栏 -->
+  <view class="top-bar">
+    <view class="filter-tabs">
+      <view class="tab-item {{filter === 'all' ? 'active' : ''}}" bindtap="filterMeetings" data-filter="all">全部</view>
+      <view class="tab-item {{filter === '1' ? 'active' : ''}}" bindtap="filterMeetings" data-filter="1">已发布</view>
+      <view class="tab-item {{filter === '2' ? 'active' : ''}}" bindtap="filterMeetings" data-filter="2">进行中</view>
+      <view class="tab-item {{filter === '3' ? 'active' : ''}}" bindtap="filterMeetings" data-filter="3">已结束</view>
+    </view>
+    <view class="create-btn" bindtap="showCreateModal">+ 创建会议</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 会议列表 -->
+  <block wx:else>
+    <view class="meeting-list" wx:if="{{meetingList.length > 0}}">
+      <view 
+        class="meeting-card" 
+        wx:for="{{meetingList}}" 
+        wx:key="id"
+        bindtap="goToDetail"
+        data-id="{{item.id}}"
+      >
+        <view class="card-header">
+          <view class="meeting-title">{{item.title}}</view>
+          <view class="tag tag-{{item.status === 2 ? 'success' : item.status === 3 ? 'info' : 'warning'}}">
+            {{item.status === 0 ? '草稿' : item.status === 1 ? '已发布' : item.status === 2 ? '进行中' : '已结束'}}
+          </view>
+        </view>
+        <view class="card-body">
+          <view class="info-row">
+            <text class="icon">📍</text>
+            <text>{{item.location}}</text>
+          </view>
+          <view class="info-row">
+            <text class="icon">🕐</text>
+            <text>{{item.startTime}} ~ {{item.endTime}}</text>
+          </view>
+        </view>
+        <view class="card-footer">
+          <view 
+            class="btn-sign" 
+            catchtap="goToCheckIn" 
+            data-token="{{item.qrcodeToken}}"
+            wx:if="{{item.status >= 1}}"
+          >
+            📱 签到
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">暂无会议</text>
+    </view>
+  </block>
+
+  <!-- 创建会议弹窗 -->
+  <view class="modal-mask" wx:if="{{showCreateModal}}" bindtap="closeCreateModal"></view>
+  <view class="modal-container" wx:if="{{showCreateModal}}">
+    <view class="modal-title">创建会议</view>
+    <view class="form-item">
+      <text class="form-label">会议标题</text>
+      <input class="form-input" placeholder="请输入会议标题" value="{{form.title}}" bindinput="onInput" data-field="title" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">会议地点</text>
+      <input class="form-input" placeholder="请输入会议地点" value="{{form.location}}" bindinput="onInput" data-field="location" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">开始时间</text>
+      <input class="form-input" type="text" placeholder="格式: 2024-01-01 10:00" value="{{form.startTime}}" bindinput="onInput" data-field="startTime" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">结束时间</text>
+      <input class="form-input" type="text" placeholder="格式: 2024-01-01 12:00" value="{{form.endTime}}" bindinput="onInput" data-field="endTime" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">关联群组(可选)</text>
+      <picker bindchange="onGroupChange" value="{{form.groupIndex}}" range="{{myGroups}}" range-key="groupName">
+        <view class="form-input picker-input">
+          {{form.groupName || '选择群组'}}
+        </view>
+      </picker>
+    </view>
+    <view class="modal-buttons">
+      <view class="btn btn-cancel" bindtap="closeCreateModal">取消</view>
+      <view class="btn btn-confirm" bindtap="submitCreateMeeting">创建</view>
+    </view>
+  </view>
+</view>

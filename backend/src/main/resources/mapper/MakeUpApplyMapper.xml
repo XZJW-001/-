@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meeting.mapper.MakeUpApplyMapper">
+
+    <resultMap id="MakeUpApplyResultMap" type="com.meeting.entity.MakeUpApply">
+        <id column="id" property="id"/>
+        <result column="meeting_id" property="meetingId"/>
+        <result column="user_id" property="userId"/>
+        <result column="reason" property="reason"/>
+        <result column="proof_url" property="proofUrl"/>
+        <result column="status" property="status"/>
+        <result column="approver_id" property="approverId"/>
+        <result column="approve_time" property="approveTime"/>
+        <result column="approve_remark" property="approveRemark"/>
+        <result column="original_sign_time" property="originalSignTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="MakeUpApplyWithUserMap" type="com.meeting.entity.MakeUpApply" extends="MakeUpApplyResultMap">
+        <association property="user" javaType="com.meeting.entity.SysUser">
+            <id column="user_id" property="id"/>
+            <result column="real_name" property="realName"/>
+            <result column="phone" property="phone"/>
+            <result column="dept_id" property="deptId"/>
+        </association>
+    </resultMap>
+
+    <!-- 查询会议的补签申请列表（带用户信息） -->
+    <select id="findByMeetingIdWithUser" resultMap="MakeUpApplyWithUserMap">
+        SELECT 
+            ma.id, ma.meeting_id, ma.user_id, ma.reason, ma.proof_url, ma.status,
+            ma.approver_id, ma.approve_time, ma.approve_remark, ma.original_sign_time,
+            ma.create_time, ma.update_time,
+            u.real_name, u.phone, u.dept_id
+        FROM make_up_apply ma
+        LEFT JOIN sys_user u ON ma.user_id = u.id
+        WHERE ma.meeting_id = #{meetingId}
+        <if test="status != null">
+            AND ma.status = #{status}
+        </if>
+        ORDER BY ma.create_time DESC
+    </select>
+
+    <!-- 查询用户的补签申请 -->
+    <select id="findByUserId" resultMap="MakeUpApplyResultMap">
+        SELECT * FROM make_up_apply WHERE user_id = #{userId} ORDER BY create_time DESC
+    </select>
+</mapper>

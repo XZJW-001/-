@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meeting.mapper.ProxySignRecordMapper">
+
+    <resultMap id="ProxySignRecordResultMap" type="com.meeting.entity.ProxySignRecord">
+        <id column="id" property="id"/>
+        <result column="meeting_id" property="meetingId"/>
+        <result column="proxy_user_id" property="proxyUserId"/>
+        <result column="target_user_id" property="targetUserId"/>
+        <result column="reason" property="reason"/>
+        <result column="status" property="status"/>
+        <result column="sign_time" property="signTime"/>
+        <result column="approver_id" property="approverId"/>
+        <result column="approve_time" property="approveTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="ProxySignRecordWithUserMap" type="com.meeting.entity.ProxySignRecord" extends="ProxySignRecordResultMap">
+        <association property="proxyUser" javaType="com.meeting.entity.SysUser">
+            <id column="proxy_user_id" property="id"/>
+            <result column="proxy_real_name" property="realName"/>
+        </association>
+        <association property="targetUser" javaType="com.meeting.entity.SysUser">
+            <id column="target_user_id" property="id"/>
+            <result column="target_real_name" property="realName"/>
+        </association>
+    </resultMap>
+
+    <!-- 查询会议的代签记录列表（带用户信息） -->
+    <select id="findByMeetingIdWithUser" resultMap="ProxySignRecordWithUserMap">
+        SELECT 
+            psr.id, psr.meeting_id, psr.proxy_user_id, psr.target_user_id, psr.reason,
+            psr.status, psr.sign_time, psr.approver_id, psr.approve_time,
+            psr.create_time, psr.update_time,
+            u1.real_name as proxy_real_name,
+            u2.real_name as target_real_name
+        FROM proxy_sign_record psr
+        LEFT JOIN sys_user u1 ON psr.proxy_user_id = u1.id
+        LEFT JOIN sys_user u2 ON psr.target_user_id = u2.id
+        WHERE psr.meeting_id = #{meetingId}
+        ORDER BY psr.create_time DESC
+    </select>
+
+    <!-- 查询代签人相关的记录 -->
+    <select id="findByProxyUserId" resultMap="ProxySignRecordResultMap">
+        SELECT * FROM proxy_sign_record WHERE proxy_user_id = #{proxyUserId} ORDER BY create_time DESC
+    </select>
+
+    <!-- 查询被代签人相关的记录 -->
+    <select id="findByTargetUserId" resultMap="ProxySignRecordResultMap">
+        SELECT * FROM proxy_sign_record WHERE target_user_id = #{targetUserId} ORDER BY create_time DESC
+    </select>
+</mapper>

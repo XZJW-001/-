@@ -1,0 +1,41 @@
+<view class="guest-page page-shell">
+  <view wx:if="{{loading && !meeting}}" class="loading-state"><view class="loading-spinner"></view><text>正在验证访客邀请</text></view>
+
+  <block wx:if="{{meeting && !submitted}}">
+    <view class="page-heading">
+      <text class="page-kicker">临时访客</text>
+      <view class="page-title">{{meeting.title}}</view>
+      <view class="page-desc">{{meeting.location}} · {{meeting.startTime}}</view>
+    </view>
+
+    <view class="meeting-band">
+      <view><text>签到身份</text><strong>会议访客</strong></view>
+      <view><text>邀请有效期</text><strong>{{meeting.expireTime}}</strong></view>
+    </view>
+
+    <view class="section-card guest-form">
+      <view class="section-heading compact"><view class="section-title">访客信息</view></view>
+      <view class="form-item">
+        <text class="form-label">姓名</text>
+        <input class="form-input" value="{{form.guestName}}" bindinput="inputName" maxlength="60" placeholder="请输入姓名" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">单位</text>
+        <input class="form-input" value="{{form.organization}}" bindinput="inputOrg" maxlength="120" placeholder="公司、学校或组织名称" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">联系电话</text>
+        <input class="form-input" type="number" value="{{form.phone}}" bindinput="inputPhone" maxlength="20" placeholder="用于避免重复签到" />
+      </view>
+      <view class="btn btn-primary btn-block {{loading ? 'btn-disabled' : ''}}" bindtap="submit">{{loading ? '提交中...' : '确认访客签到'}}</view>
+    </view>
+  </block>
+
+  <view wx:if="{{submitted}}" class="success-panel">
+    <view class="success-mark">✓</view>
+    <view class="success-title">访客签到成功</view>
+    <view class="success-desc">{{result.guestName}}，欢迎参加本次会议</view>
+    <view class="success-time">签到时间 {{result.signTime}}</view>
+    <view class="btn btn-primary btn-block" bindtap="close">完成</view>
+  </view>
+</view>

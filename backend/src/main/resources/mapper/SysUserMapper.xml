@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meeting.mapper.SysUserMapper">
+
+    <resultMap id="SysUserResultMap" type="com.meeting.entity.SysUser">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="real_name" property="realName"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gender" property="gender"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="position" property="position"/>
+        <result column="user_type" property="userType"/>
+        <result column="status" property="status"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 根据用户名查询用户 -->
+    <select id="findByUsername" resultMap="SysUserResultMap">
+        SELECT * FROM sys_user WHERE username = #{username}
+    </select>
+
+    <!-- 根据手机号查询用户 -->
+    <select id="findByPhone" resultMap="SysUserResultMap">
+        SELECT * FROM sys_user WHERE phone = #{phone}
+    </select>
+
+    <!-- 根据部门ID查询用户列表 -->
+    <select id="findByDeptId" resultMap="SysUserResultMap">
+        SELECT * FROM sys_user WHERE dept_id = #{deptId} AND status = 1 ORDER BY real_name ASC
+    </select>
+
+    <!-- 查询所有用户 -->
+    <select id="findAll" resultMap="SysUserResultMap">
+        SELECT * FROM sys_user WHERE status = 1 ORDER BY dept_id, real_name
+    </select>
+
+    <!-- 分页查询用户列表 -->
+    <select id="selectPageList" resultMap="SysUserResultMap">
+        SELECT * FROM sys_user
+        <where>
+            <if test="params.realName != null and params.realName != ''">
+                AND real_name LIKE CONCAT('%', #{params.realName}, '%')
+            </if>
+            <if test="params.deptId != null">
+                AND dept_id = #{params.deptId}
+            </if>
+            <if test="params.userType != null">
+                AND user_type = #{params.userType}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

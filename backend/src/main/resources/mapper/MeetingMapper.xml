@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meeting.mapper.MeetingMapper">
+
+    <resultMap id="MeetingResultMap" type="com.meeting.entity.Meeting">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="location" property="location"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="checkin_start_time" property="checkinStartTime"/>
+        <result column="checkin_end_time" property="checkinEndTime"/>
+        <result column="late_time" property="lateTime"/>
+        <result column="qrcode_token" property="qrcodeToken"/>
+        <result column="qrcode_expire" property="qrcodeExpire"/>
+        <result column="sign_methods" property="signMethods" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="status" property="status"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 分页查询会议列表 -->
+    <select id="selectPageList" resultMap="MeetingResultMap">
+        SELECT * FROM meeting
+        <where>
+            <if test="params.title != null and params.title != ''">
+                AND title LIKE CONCAT('%', #{params.title}, '%')
+            </if>
+            <if test="params.status != null">
+                AND status = #{params.status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据二维码Token查询会议 -->
+    <select id="findByQrcodeToken" resultMap="MeetingResultMap">
+        SELECT * FROM meeting WHERE qrcode_token = #{token}
+    </select>
+
+    <!-- 根据创建人查询会议列表 -->
+    <select id="findByCreatorId" resultMap="MeetingResultMap">
+        SELECT * FROM meeting WHERE creator_id = #{creatorId} ORDER BY create_time DESC
+    </select>
+
+    <!-- 查询需要自动发布的会议（草稿状态且签到开始时间已到） -->
+    <select id="findMeetingsToPublish" resultMap="MeetingResultMap">
+        SELECT * FROM meeting
+        WHERE status = 0
+        AND checkin_start_time IS NOT NULL
+        AND checkin_start_time <![CDATA[ <= ]]> #{now}
+    </select>
+
+    <!-- 查询需要自动开始的会议（已发布状态且会议开始时间已到） -->
+    <select id="findMeetingsToStart" resultMap="MeetingResultMap">
+        SELECT * FROM meeting
+        WHERE status = 1
+        AND start_time IS NOT NULL
+        AND start_time <![CDATA[ <= ]]> #{now}
+    </select>
+
+    <!-- 查询需要自动结束的会议（进行中状态且会议结束时间已到） -->
+    <select id="findMeetingsToEnd" resultMap="MeetingResultMap">
+        SELECT * FROM meeting
+        WHERE status = 2
+        AND end_time IS NOT NULL
+        AND end_time <![CDATA[ <= ]]> #{now}
+    </select>
+</mapper>

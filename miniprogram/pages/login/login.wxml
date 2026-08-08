@@ -1,0 +1,81 @@
+<view class="login-page">
+  <view class="login-hero">
+    <image class="hero-photo" src="/images/meeting-team.jpg" mode="aspectFill"></image>
+    <view class="hero-shade"></view>
+    <view class="brand-lockup">
+      <view class="brand-mark">
+        <view class="corner top-left"></view>
+        <view class="corner top-right"></view>
+        <view class="corner bottom-left"></view>
+        <view class="corner bottom-right"></view>
+      </view>
+      <view>
+        <view class="brand-name">会议签到中心</view>
+        <view class="brand-en">MEETING CONSOLE</view>
+      </view>
+    </view>
+    <view class="hero-copy">
+      <view class="hero-kicker">QR ATTENDANCE</view>
+      <view class="hero-title">每一次到场<br />都清晰可见</view>
+      <view class="hero-desc">统一管理会议、成员与签到数据</view>
+    </view>
+  </view>
+
+  <view class="login-panel">
+    <view class="panel-heading">
+      <text class="page-kicker">账号登录</text>
+      <view class="panel-title">欢迎回来</view>
+      <view class="panel-desc">使用系统账号进入会议工作空间</view>
+    </view>
+
+    <view class="login-form">
+      <view class="field-group">
+        <view class="field-label">用户名</view>
+        <view class="input-shell">
+          <view class="field-mark">账</view>
+          <input
+            type="text"
+            placeholder="请输入用户名"
+            value="{{username}}"
+            data-field="username"
+            bindinput="onInput"
+            class="input"
+            placeholder-class="placeholder"
+          />
+        </view>
+      </view>
+
+      <view class="field-group">
+        <view class="field-label">密码</view>
+        <view class="input-shell">
+          <view class="field-mark quiet">密</view>
+          <input
+            type="password"
+            placeholder="请输入密码"
+            value="{{password}}"
+            data-field="password"
+            bindinput="onInput"
+            bindconfirm="handleLogin"
+            confirm-type="done"
+            class="input"
+            placeholder-class="placeholder"
+          />
+        </view>
+      </view>
+
+      <view class="btn btn-primary btn-block login-btn {{loading ? 'btn-disabled' : ''}}" bindtap="handleLogin">
+        {{loading ? '正在登录...' : '进入工作台'}}
+      </view>
+    </view>
+
+    <view class="alternative">
+      <view class="divider"><text>或</text></view>
+      <view class="wechat-login" bindtap="handleWechatLogin">
+        <view class="wechat-mark">微</view>
+        <text>使用微信登录</text>
+      </view>
+    </view>
+
+    <view class="security-note"><text class="security-dot"></text>登录信息将被加密传输</view>
+  </view>
+</view>

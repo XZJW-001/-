@@ -1,0 +1,101 @@
+<view class="group-page">
+  <view class="page-intro">
+    <text class="page-kicker">工作空间</text>
+    <view class="title-row">
+      <view>
+        <view class="page-title">我的群组</view>
+        <view class="page-desc">集中查看群成员、会议与签到安排</view>
+      </view>
+      <view class="record-count">{{groups.length}} 个群组</view>
+    </view>
+  </view>
+
+  <view class="overview-band" wx:if="{{groups.length > 0}}">
+    <view class="metric-item">
+      <view class="metric-value">{{groups.length}}</view>
+      <view class="metric-label">已加入群组</view>
+    </view>
+    <view class="metric-divider"></view>
+    <view class="metric-item">
+      <view class="metric-value success">{{totalMembers}}</view>
+      <view class="metric-label">群内成员</view>
+    </view>
+  </view>
+
+  <view class="workspace-tools">
+    <view class="search-bar">
+      <input class="search-input" placeholder="搜索群组名称或编号" placeholder-class="search-placeholder" bindinput="onSearchInput" confirm-type="search" bindconfirm="searchGroup" />
+      <view class="search-btn" bindtap="searchGroup">搜索</view>
+    </view>
+    <view class="tool-actions">
+      <view class="tool-btn primary" bindtap="createGroup">
+        <text class="tool-symbol">＋</text>
+        <text>创建群组</text>
+      </view>
+      <view class="tool-btn" bindtap="joinGroup">
+        <text class="tool-symbol">#</text>
+        <text>加入群组</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-heading">
+    <view>
+      <view class="section-title">群组列表</view>
+      <view class="section-desc">进入群组查看会议、签到与成员</view>
+    </view>
+  </view>
+
+  <view class="group-list" wx:if="{{groups.length > 0}}">
+    <view class="group-item" wx:for="{{groups}}" wx:key="id" bindtap="viewGroup" data-id="{{item.id}}">
+      <view class="group-avatar">{{item.groupName[0]}}</view>
+      <view class="group-info">
+        <view class="group-name">{{item.groupName}}</view>
+        <view class="group-desc">{{item.description || '暂无群组描述'}}</view>
+        <view class="group-meta">
+          <text class="meta-item">成员 {{item.memberCount || 0}}</text>
+          <text class="meta-item code">编号 {{item.groupCode}}</text>
+        </view>
+      </view>
+      <view class="group-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{groups.length === 0}}">
+    <image class="empty-icon" src="/images/group.svg" mode="aspectFit"></image>
+    <view class="empty-text">还没有群组</view>
+    <view class="empty-tip">创建新群组，或使用 6 位编号加入</view>
+  </view>
+
+  <view class="modal-mask" wx:if="{{showCreateModal}}" bindtap="closeCreateModal"></view>
+  <view class="modal-container" wx:if="{{showCreateModal}}">
+    <view class="modal-title">创建群组</view>
+    <view class="modal-desc">填写基础信息后即可邀请成员</view>
+    <view class="form-item">
+      <text class="form-label">群组名称</text>
+      <input class="form-input" placeholder="请输入群组名称" value="{{form.groupName}}" bindinput="onInput" data-field="groupName" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">群组描述</text>
+      <textarea class="form-textarea" placeholder="简要说明群组用途" value="{{form.description}}" bindinput="onInput" data-field="description"></textarea>
+    </view>
+    <view class="modal-buttons">
+      <view class="btn btn-quiet" bindtap="closeCreateModal">取消</view>
+      <view class="btn btn-primary" bindtap="submitCreateGroup">创建</view>
+    </view>
+  </view>
+
+  <view class="modal-mask" wx:if="{{showJoinModal}}" bindtap="closeJoinModal"></view>
+  <view class="modal-container" wx:if="{{showJoinModal}}">
+    <view class="modal-title">加入群组</view>
+    <view class="modal-desc">输入管理员提供的 6 位群组编号</view>
+    <view class="form-item">
+      <text class="form-label">群组编号</text>
+      <input class="form-input code-input" placeholder="例如 102938" maxlength="6" value="{{joinCode}}" bindinput="onJoinCodeInput" />
+    </view>
+    <view class="modal-buttons">
+      <view class="btn btn-quiet" bindtap="closeJoinModal">取消</view>
+      <view class="btn btn-primary" bindtap="submitJoinGroup">加入</view>
+    </view>
+  </view>
+</view>
