@@ -18,6 +18,10 @@
 - 后端：Java 17、Spring Boot 3、MyBatis-Plus、JWT
 - 数据：MySQL 8、Redis
 
+## 技术原型图
+
+![会议签到与数据统计系统技术原型图](docs/技术原型图.svg)
+
 ## 本地运行
 
 ### 后端

@@ -1,0 +1,216 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <style>
+      text { font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif; letter-spacing: 0; }
+      .title { fill: #18212f; font-size: 34px; font-weight: 700; }
+      .subtitle { fill: #687386; font-size: 16px; }
+      .layer-label { fill: #596579; font-size: 14px; font-weight: 700; }
+      .box-title { fill: #18212f; font-size: 20px; font-weight: 700; }
+      .box-subtitle { fill: #687386; font-size: 14px; }
+      .module-title { fill: #243247; font-size: 15px; font-weight: 700; }
+      .module-note { fill: #687386; font-size: 12px; }
+      .flow-title { fill: #ffffff; font-size: 21px; font-weight: 700; }
+      .flow-text { fill: #354052; font-size: 14px; }
+      .flow-number { fill: #ffffff; font-size: 13px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+      .data-title { fill: #18212f; font-size: 18px; font-weight: 700; }
+      .data-note { fill: #687386; font-size: 13px; }
+      .deploy-text { fill: #354052; font-size: 14px; font-weight: 600; }
+      .legend-text { fill: #596579; font-size: 12px; }
+    </style>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#0f766e"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#b45309"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#f4f6f8"/>
+  <rect x="30" y="26" width="1540" height="948" rx="8" fill="#ffffff" stroke="#e1e6ed"/>
+
+  <text x="70" y="78" class="title">会议签到与数据统计系统｜技术原型图</text>
+  <text x="70" y="108" class="subtitle">PC 管理端、微信小程序、统一后端服务与签到审批闭环</text>
+
+  <text x="70" y="150" class="layer-label">01 访问层</text>
+
+  <g transform="translate(70 170)">
+    <rect width="310" height="104" rx="8" fill="#eef4ff" stroke="#b8ccfa"/>
+    <rect x="24" y="24" width="58" height="40" rx="4" fill="none" stroke="#2563eb" stroke-width="3"/>
+    <line x1="18" y1="72" x2="88" y2="72" stroke="#2563eb" stroke-width="3"/>
+    <line x1="39" y1="64" x2="33" y2="72" stroke="#2563eb" stroke-width="3"/>
+    <line x1="67" y1="64" x2="73" y2="72" stroke="#2563eb" stroke-width="3"/>
+    <text x="106" y="43" class="box-title">PC 管理端</text>
+    <text x="106" y="70" class="box-subtitle">Vue 3 · Element Plus</text>
+    <text x="106" y="91" class="box-subtitle">ECharts · Pinia · Vite</text>
+  </g>
+
+  <g transform="translate(410 170)">
+    <rect width="310" height="104" rx="8" fill="#ecfdf8" stroke="#a7dfd1"/>
+    <rect x="30" y="16" width="48" height="72" rx="7" fill="none" stroke="#0f766e" stroke-width="3"/>
+    <line x1="45" y1="24" x2="63" y2="24" stroke="#0f766e" stroke-width="3"/>
+    <circle cx="54" cy="79" r="3" fill="#0f766e"/>
+    <text x="106" y="43" class="box-title">微信小程序端</text>
+    <text x="106" y="70" class="box-subtitle">WXML · WXSS</text>
+    <text x="106" y="91" class="box-subtitle">JavaScript · 微信 API</text>
+  </g>
+
+  <g transform="translate(750 170)">
+    <rect width="370" height="104" rx="8" fill="#fff7e8" stroke="#f0ce95"/>
+    <path d="M31 67 C18 66 17 48 28 43 C28 27 47 20 58 31 C69 25 84 34 83 47 C96 50 95 68 81 68 Z" fill="none" stroke="#b45309" stroke-width="3"/>
+    <path d="M43 52 H69 M61 44 L69 52 L61 60" fill="none" stroke="#b45309" stroke-width="3"/>
+    <text x="112" y="43" class="box-title">公网访问</text>
+    <text x="112" y="70" class="box-subtitle">cpolar HTTPS 内网穿透</text>
+    <text x="112" y="91" class="box-subtitle">真机调试与外部访问</text>
+  </g>
+
+  <path d="M225 274 V308 H445" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <path d="M565 274 V308 H565" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <path d="M935 274 V308 H685" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+
+  <g transform="translate(350 310)">
+    <rect width="800" height="62" rx="8" fill="#18212f"/>
+    <path d="M30 31 L40 21 L50 31 L40 41 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
+    <text x="68" y="28" fill="#ffffff" font-size="18" font-weight="700">统一 REST API</text>
+    <text x="68" y="49" fill="#cdd5df" font-size="13">JWT 身份认证 · RBAC 权限控制 · CORS · 统一异常响应</text>
+    <text x="735" y="39" fill="#9fb9ff" font-size="13" font-weight="700">/api</text>
+  </g>
+
+  <text x="70" y="405" class="layer-label">02 业务服务层</text>
+  <g transform="translate(70 425)">
+    <rect width="1050" height="276" rx="8" fill="#f8fafc" stroke="#cdd5df"/>
+    <rect width="1050" height="58" rx="8" fill="#eef4ff"/>
+    <rect y="50" width="1050" height="8" fill="#eef4ff"/>
+    <g transform="translate(24 15)">
+      <rect width="31" height="28" rx="4" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+      <line x1="7" y1="9" x2="24" y2="9" stroke="#2563eb" stroke-width="2"/>
+      <line x1="7" y1="16" x2="24" y2="16" stroke="#2563eb" stroke-width="2"/>
+      <line x1="7" y1="23" x2="19" y2="23" stroke="#2563eb" stroke-width="2"/>
+    </g>
+    <text x="72" y="36" class="box-title">Spring Boot 3 后端服务</text>
+    <text x="780" y="35" class="box-subtitle">Java 17 · MyBatis-Plus · Maven</text>
+
+    <g transform="translate(24 82)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#d9e5ff"/>
+      <circle cx="31" cy="36" r="17" fill="#eef4ff"/><text x="31" y="41" fill="#2563eb" font-size="13" font-weight="700" text-anchor="middle">权</text>
+      <text x="60" y="31" class="module-title">用户与权限</text><text x="60" y="52" class="module-note">认证、角色、部门、账号</text>
+    </g>
+    <g transform="translate(278 82)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#d9e5ff"/>
+      <circle cx="31" cy="36" r="17" fill="#eef4ff"/><text x="31" y="41" fill="#2563eb" font-size="13" font-weight="700" text-anchor="middle">会</text>
+      <text x="60" y="31" class="module-title">会议与群组</text><text x="60" y="52" class="module-note">创建、发布、参会人管理</text>
+    </g>
+    <g transform="translate(532 82)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#d9e5ff"/>
+      <circle cx="31" cy="36" r="17" fill="#eef4ff"/><text x="31" y="41" fill="#2563eb" font-size="13" font-weight="700" text-anchor="middle">码</text>
+      <text x="60" y="31" class="module-title">动态二维码</text><text x="60" y="52" class="module-note">Token、有效期、防重复</text>
+    </g>
+    <g transform="translate(786 82)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#bde4da"/>
+      <circle cx="31" cy="36" r="17" fill="#ecfdf8"/><text x="31" y="41" fill="#0f766e" font-size="13" font-weight="700" text-anchor="middle">签</text>
+      <text x="60" y="31" class="module-title">多方式签到</text><text x="60" y="52" class="module-note">扫码、定位、拍照、手势</text>
+    </g>
+
+    <g transform="translate(24 174)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#f0ce95"/>
+      <circle cx="31" cy="36" r="17" fill="#fff7e8"/><text x="31" y="41" fill="#b45309" font-size="13" font-weight="700" text-anchor="middle">补</text>
+      <text x="60" y="31" class="module-title">补签审批</text><text x="60" y="52" class="module-note">申请、审核、结果回写</text>
+    </g>
+    <g transform="translate(278 174)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#f0ce95"/>
+      <circle cx="31" cy="36" r="17" fill="#fff7e8"/><text x="31" y="41" fill="#b45309" font-size="13" font-weight="700" text-anchor="middle">代</text>
+      <text x="60" y="31" class="module-title">代签申请与审批</text><text x="60" y="52" class="module-note">撤销、驳回、自动生成记录</text>
+    </g>
+    <g transform="translate(532 174)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#bde4da"/>
+      <circle cx="31" cy="36" r="17" fill="#ecfdf8"/><text x="31" y="41" fill="#0f766e" font-size="13" font-weight="700" text-anchor="middle">统</text>
+      <text x="60" y="31" class="module-title">统计分析</text><text x="60" y="52" class="module-note">出勤率、趋势、图表报表</text>
+    </g>
+    <g transform="translate(786 174)">
+      <rect width="238" height="72" rx="6" fill="#ffffff" stroke="#cdd5df"/>
+      <circle cx="31" cy="36" r="17" fill="#f1f4f8"/><text x="31" y="41" fill="#596579" font-size="13" font-weight="700" text-anchor="middle">智</text>
+      <text x="60" y="31" class="module-title">通知与弱网同步</text><text x="60" y="52" class="module-note">提醒、离线队列、恢复同步</text>
+    </g>
+  </g>
+  <path d="M750 372 V415" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+
+  <g transform="translate(1160 170)">
+    <rect width="380" height="620" rx="8" fill="#ffffff" stroke="#cdd5df"/>
+    <rect width="380" height="66" rx="8" fill="#18212f"/>
+    <rect y="58" width="380" height="8" fill="#18212f"/>
+    <text x="26" y="41" class="flow-title">核心业务闭环</text>
+
+    <g transform="translate(26 92)">
+      <line x1="17" y1="18" x2="17" y2="386" stroke="#b8ccfa" stroke-width="3"/>
+      <circle cx="17" cy="18" r="17" fill="#2563eb"/><text x="17" y="18" class="flow-number">1</text><text x="51" y="23" class="flow-text">创建并发布会议</text>
+      <circle cx="17" cy="78" r="17" fill="#2563eb"/><text x="17" y="78" class="flow-number">2</text><text x="51" y="83" class="flow-text">生成动态二维码</text>
+      <circle cx="17" cy="138" r="17" fill="#2563eb"/><text x="17" y="138" class="flow-number">3</text><text x="51" y="143" class="flow-text">扫码或多方式签到</text>
+      <circle cx="17" cy="198" r="17" fill="#0f766e"/><text x="17" y="198" class="flow-number">4</text><text x="51" y="193" class="flow-text">身份、时间、位置校验</text><text x="51" y="213" class="flow-text">以及防重复验证</text>
+      <circle cx="17" cy="268" r="17" fill="#0f766e"/><text x="17" y="268" class="flow-number">5</text><text x="51" y="273" class="flow-text">生成签到记录</text>
+      <circle cx="17" cy="328" r="17" fill="#b45309"/><text x="17" y="328" class="flow-number">6</text><text x="51" y="333" class="flow-text">补签 / 代签进入审批</text>
+      <circle cx="17" cy="388" r="17" fill="#0f766e"/><text x="17" y="388" class="flow-number">7</text><text x="51" y="393" class="flow-text">实时统计与报表展示</text>
+    </g>
+
+    <g transform="translate(24 510)">
+      <rect width="332" height="86" rx="6" fill="#fff7e8" stroke="#f0ce95"/>
+      <text x="18" y="27" fill="#8a4307" font-size="14" font-weight="700">代签闭环</text>
+      <text x="18" y="53" fill="#6f4a24" font-size="12">本人申请 → 同会代签人 → 管理员审批</text>
+      <text x="18" y="73" fill="#6f4a24" font-size="12">→ 自动生成代签记录 + 签到记录</text>
+    </g>
+  </g>
+
+  <text x="70" y="744" class="layer-label">03 数据层</text>
+  <g transform="translate(70 760)">
+    <rect width="330" height="112" rx="8" fill="#ecfdf8" stroke="#a7dfd1"/>
+    <ellipse cx="53" cy="35" rx="24" ry="10" fill="none" stroke="#0f766e" stroke-width="2.5"/>
+    <path d="M29 35 V69 C29 82 77 82 77 69 V35" fill="none" stroke="#0f766e" stroke-width="2.5"/>
+    <path d="M29 52 C29 65 77 65 77 52" fill="none" stroke="#0f766e" stroke-width="2"/>
+    <text x="98" y="39" class="data-title">MySQL 8.0</text>
+    <text x="98" y="64" class="data-note">用户 · 会议 · 参会人 · 签到记录</text>
+    <text x="98" y="85" class="data-note">补签申请 · 代签申请 · 统计数据</text>
+  </g>
+  <g transform="translate(430 760)">
+    <rect width="330" height="112" rx="8" fill="#fff1f4" stroke="#f2d2db"/>
+    <rect x="29" y="28" width="48" height="48" rx="7" fill="none" stroke="#be3654" stroke-width="2.5"/>
+    <line x1="38" y1="42" x2="68" y2="42" stroke="#be3654" stroke-width="2"/><line x1="38" y1="53" x2="68" y2="53" stroke="#be3654" stroke-width="2"/><line x1="38" y1="64" x2="60" y2="64" stroke="#be3654" stroke-width="2"/>
+    <text x="98" y="39" class="data-title">Redis</text>
+    <text x="98" y="64" class="data-note">Token · 缓存 · 临时凭证</text>
+    <text x="98" y="85" class="data-note">签到防重与短期状态</text>
+  </g>
+  <g transform="translate(790 760)">
+    <rect width="330" height="112" rx="8" fill="#f1f4f8" stroke="#cdd5df"/>
+    <path d="M29 39 H48 L56 30 H78 V77 H29 Z" fill="none" stroke="#596579" stroke-width="2.5"/>
+    <text x="98" y="39" class="data-title">本地文件存储</text>
+    <text x="98" y="64" class="data-note">用户头像 · 签到照片</text>
+    <text x="98" y="85" class="data-note">二维码及上传资源</text>
+  </g>
+  <path d="M320 701 V750" fill="none" stroke="#0f766e" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <path d="M595 701 V750" fill="none" stroke="#0f766e" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <path d="M870 701 V750" fill="none" stroke="#0f766e" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+
+  <g transform="translate(1160 814)">
+    <text x="0" y="0" class="layer-label">图例</text>
+    <circle cx="8" cy="27" r="6" fill="#2563eb"/><text x="22" y="31" class="legend-text">访问与业务</text>
+    <circle cx="112" cy="27" r="6" fill="#0f766e"/><text x="126" y="31" class="legend-text">数据成功流</text>
+    <circle cx="234" cy="27" r="6" fill="#b45309"/><text x="248" y="31" class="legend-text">审批流程</text>
+    <circle cx="8" cy="53" r="6" fill="#596579"/><text x="22" y="57" class="legend-text">基础设施</text>
+  </g>
+
+  <text x="70" y="916" class="layer-label">04 部署与访问</text>
+  <g transform="translate(70 930)">
+    <rect width="1470" height="34" rx="6" fill="#f8fafc" stroke="#e1e6ed"/>
+    <text x="22" y="23" class="deploy-text">微信开发者工具 / 手机</text>
+    <path d="M210 17 H282" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <text x="300" y="23" class="deploy-text">cpolar 公网 HTTPS</text>
+    <path d="M470 17 H542" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <text x="560" y="23" class="deploy-text">Windows 本地服务器 :8080</text>
+    <line x1="788" y1="7" x2="788" y2="27" stroke="#cdd5df"/>
+    <text x="814" y="23" class="deploy-text">浏览器</text>
+    <path d="M878 17 H940" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <text x="958" y="23" class="deploy-text">Vite :5173</text>
+    <path d="M1050 17 H1112" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <text x="1130" y="23" class="deploy-text">Spring Boot REST API :8080</text>
+  </g>
+</svg>
